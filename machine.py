@@ -8,22 +8,23 @@ class Machine:
         self.arduino.flush()
         self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-        self.ultrasonic_trig_pin1 = 14
-        self.ultrasonic_echo_pin1 = 15
-        self.ultrasonic_trig_pin2 = 18
-        self.ultrasonic_echo_pin2 = 23
-        self.ultrasonic_trig_pin3 = 24
-        self.ultrasonic_echo_pin3 = 25
-        self.ultrasonic_trig_pin4 = 28
-        self.ultrasonic_echo_pin4 = 29
+        self.ultrasonic_trig_pin1 = 23
+        self.ultrasonic_echo_pin1 = 12
+        self.ultrasonic_trig_pin2 = 16
+        self.ultrasonic_echo_pin2 = 24
+        self.ultrasonic_trig_pin3 = 25
+        self.ultrasonic_echo_pin3 = 20
+        self.ultrasonic_trig_pin4 = 21
+        self.ultrasonic_echo_pin4 = 8
 
-        self.push_button = 19
-        self.led_pin = 27
+        self.push_button = 5
+        self.led_pin = 6
         self.inductive_sensor_pin = 17
-        self.IR_SENSOR_PIN = 22
+        self.IR_SENSOR_PIN = 27
     
-        GPIO.setmode()
+        #GPIO.setmode()
         GPIO.setmode(GPIO.BCM) 
+        GPIO.setwarnings(False)
         GPIO.setup(self.ultrasonic_trig_pin1, GPIO.OUT)
         GPIO.setup(self.ultrasonic_echo_pin1, GPIO.IN)
         GPIO.setup(self.ultrasonic_trig_pin2, GPIO.OUT)
@@ -33,11 +34,13 @@ class Machine:
         GPIO.setup(self.ultrasonic_trig_pin4, GPIO.OUT)
         GPIO.setup(self.ultrasonic_echo_pin4, GPIO.IN)
     
-        GPIO.setup(self.push_button, GPIO.IN)
+        GPIO.setup(self.push_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.led_pin, GPIO.OUT)
         GPIO.setup(self.led_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.IR_SENSOR_PIN, GPIO.IN)
-    
+        GPIO.setup(self.inductive_sensor_pin, GPIO.IN)
+        
+
     def send_command(self, command: int):
         '''
         Send command to Arduino
@@ -176,7 +179,7 @@ class Machine:
         GPIO.output(self.ultrasonic_trig_pin2, False)
         while GPIO.input(self.ultrasonic_echo_pin2) == 0:
             pulse_start = time.time()
-        while GPIO.input(self.ultrasonic_echo_pin1) == 1:
+        while GPIO.input(self.ultrasonic_echo_pin2) == 1:
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = pulse_duration * 17150
@@ -239,9 +242,10 @@ class Machine:
 
         Returns 0 or 1
         '''
-        if GPIO.input(self.inductive_sensor_pin) == GPIO.LOW:
+        if GPIO.input(self.inductive_sensor_pin) == GPIO.HIGH:
             return 1
         return 0
+    
     def turn_on_led(self):
         '''
         Turn on LED light
@@ -254,8 +258,10 @@ class Machine:
         '''
         GPIO.output(self.led_pin, GPIO.LOW)
 
+
     def button_State(self):
-        '''
-        button pushed
-        '''
-        GPIO.input(self.push_button, GPIO.LOW)
+        # Check if the push button is pressed (assuming HIGH means pressed)
+        if GPIO.input(self.push_button) == GPIO.HIGH:
+            return True  # Button pressed
+        else:
+            return False  # Button not pressed

@@ -5,7 +5,7 @@ int pos = 0;    // Variable to store the servo position
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
-  myServo.attach(13);   // Attach the servo to pin 9
+  myServo.attach(0);   // Attach the servo to pin 9
   myServo.write(0);    // Set initial position of the servo to 0 degrees
 }
 

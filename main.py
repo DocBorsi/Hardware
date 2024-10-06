@@ -1,8 +1,8 @@
 from machine import Machine
-import requests
+#import requests
 
 
-machine = Machine(port='/dev/ttyUSB0')
+machine = Machine(port='/dev/ttyACM0')
 
 # buttonState = machine.button_State()
 # inductiveState = machine.detect_object_from_inductive()
@@ -59,7 +59,7 @@ machine = Machine(port='/dev/ttyUSB0')
 #       If not, accept
 #       else reject
 #   Else reject
-
+'''
 def create_ticket(category, size):
     params = {
         "category": category,
@@ -69,7 +69,7 @@ def create_ticket(category, size):
     response = requests.get(f"http://127.0.0.1:8000/ticket/create/?", params=params)
     ticket_data = response.json()
     return ticket_data
-
+'''
 def get_size():
     if machine.get_distance_small():
         if machine.get_distance_medium():
@@ -89,7 +89,7 @@ while True:
         button_pressed = machine.button_State()
         if button_pressed:
             started = True
-    
+    '''
     if finished:
         data = create_ticket(category, size)
         print(f"New ticket: {data.get('code')} - {data.get('point')}")
@@ -97,13 +97,14 @@ while True:
         size = ""
         finished = False
         started = False
-    
+    '''
     if started:
+        machine.open_servo_1()
         # Waiting for distance to be less than 20
         distance = machine.get_distance_tube1()
         if distance < 20:
+            machine.close_servo_2()
             is_inductive = machine.detect_object_from_inductive()
-
             # If inductive (can, metal, etc)
             if is_inductive:
                 weight = -1
@@ -116,6 +117,7 @@ while True:
                 
                 if weight >= 5.00 and weight <= 50.0:
                     machine.open_servo_2_4() # Accept
+                    machine.turn_on_led()
                     category = "can"
                     finished = True
                     continue
@@ -145,6 +147,7 @@ while True:
                 is_opaque = machine.get_irbreakbeam_state()
                 if not is_opaque:
                     machine.open_servo_2_4()
+                    machine.turn_on_led()
                     category = "plastic"
                     finished = True
                     continue

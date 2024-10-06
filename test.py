@@ -3,13 +3,19 @@ from machine import Machine
 
 machine = Machine (port='/dev/ttyACM0')
 
-#machine.close_servo_1()
+# machine.close_servo_1()
 #machine.open_servo_1()
-#machine.get_distance_tube1()
+value = machine.get_distance_tube()
+machine.print("TEST")
+print(value)
 #machine.open_servo_2()
 # machine.turn_on_led()
 # value = machine.detect_object_from_inductive()
 # print(value)
+
+while True:
+    value = machine.get_button_state()
+    print(value)
 
 #params = {
 #    "category": "plastic",

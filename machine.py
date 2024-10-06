@@ -1,10 +1,12 @@
 import RPi.GPIO as GPIO
+from escpos import *
 import serial
 import time
 
 class Machine:
     def __init__(self, port) -> None:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
+        self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
         self.arduino.flush()
         self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -144,15 +146,10 @@ class Machine:
                 return None  # Return None if invalid data is received
 
 
-    def get_distance_tube1(self):
+    def get_distance_tube(self):
         '''
         Get distance from ultrasonic sensor
         '''
-        # GPIO.output(self.ultrasonic_trig_pin1, GPIO.LOW)
-        # time.sleep(0.000002)
-        # GPIO.output(self.ultrasonic_trig_pin1, GPIO.HIGH)
-        # time.sleep(0.00001)
-        # GPIO.output(self.ultrasonic_trig_pin1, GPIO.LOW)
         GPIO.output(self.ultrasonic_trig_pin1, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin1, False)
@@ -169,11 +166,6 @@ class Machine:
         '''
         Get distance from ultrasonic sensor
         '''
-        # GPIO.output(self.ultrasonic_trig_pin2, GPIO.LOW)
-        # time.sleep(0.000002)
-        # GPIO.output(self.ultrasonic_trig_pin2, GPIO.HIGH)
-        # time.sleep(0.00001)
-        # GPIO.output(self.ultrasonic_trig_pin2, GPIO.LOW)
         GPIO.output(self.ultrasonic_trig_pin2, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin2, False)
@@ -190,11 +182,6 @@ class Machine:
         '''
         Get distance from ultrasonic sensor
         '''
-        # GPIO.output(self.ultrasonic_trig_pin3, GPIO.LOW)
-        # time.sleep(0.000002)
-        # GPIO.output(self.ultrasonic_trig_pin3, GPIO.HIGH)
-        # time.sleep(0.00001)
-        # GPIO.output(self.ultrasonic_trig_pin3, GPIO.LOW)
         GPIO.output(self.ultrasonic_trig_pin3, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin3, False)
@@ -211,11 +198,6 @@ class Machine:
         '''
         Get distance from ultrasonic sensor
         '''
-        # GPIO.output(self.ultrasonic_trig_pin4, GPIO.LOW)
-        # time.sleep(0.000002)
-        # GPIO.output(self.ultrasonic_trig_pin4, GPIO.HIGH)
-        # time.sleep(0.00001)
-        # GPIO.output(self.ultrasonic_trig_pin4, GPIO.LOW)
         GPIO.output(self.ultrasonic_trig_pin4, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin4, False)
@@ -236,7 +218,7 @@ class Machine:
             return 1
         return 0
     
-    def detect_object_from_inductive(self):
+    def get_inductive_state(self):
         '''
         Get inductive sensor value
 
@@ -258,10 +240,18 @@ class Machine:
         '''
         GPIO.output(self.led_pin, GPIO.LOW)
 
-
-    def button_State(self):
-        # Check if the push button is pressed (assuming HIGH means pressed)
+    def get_button_state(self):
+        '''
+        Get button state
+        '''
         if GPIO.input(self.push_button) == GPIO.HIGH:
-            return True  # Button pressed
+            return True
         else:
-            return False  # Button not pressed
+            return False
+
+    def print(self, msg):
+        '''
+        Print to thermal printer
+        '''
+        self.printer.text("msg")
+        self.printer.cut()

@@ -66,7 +66,7 @@ while True:
                     finished = True
                     continue
                 
-                machine.open_servo_2_3()
+                machine.open_servo_2_3heavy()
                 started = False
                 continue
 
@@ -82,7 +82,6 @@ while True:
                 
                 size = get_size()
                 if not size:
-                    machine.open_servo_2_3()
                     started = False
                     continue
                 
@@ -90,11 +89,11 @@ while True:
 
                 is_opaque = machine.get_irbreakbeam_state()
                 if not is_opaque:
-                    machine.open_servo_2_4()
+                    machine.open_servo_4_5()
                     machine.turn_on_led()
                     category = "plastic"
                     finished = True
                     continue
-                machine.open_servo_2_3()
+                machine.open_servo_3()
                 started = False
                 continue

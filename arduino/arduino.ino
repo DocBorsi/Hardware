@@ -1,6 +1,7 @@
 #include <Servo.h>
-#include <HX711_ADC.h>
+#include <HX711.h>
 #include <LiquidCrystal_I2C.h> // You missed the ".h" in the include
+#include <Wire.h>
 
 LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD I2C address 0x27, 20x4 LCD
 Servo servo1; // entrance 
@@ -9,12 +10,14 @@ Servo servo3; // reject servo
 Servo servo4; // exit
 Servo servo5; // segregate
 
-HX711_ADC scale(13, 12);
-//float w1, w2, previous = 0;
-float previousWeight = 0.0;
-int stableCounter = 0;
-int stabilityThreshold = 10;
-
+HX711 scale;
+const int dataPin=13;
+const int clockPin=12;
+float w1, w2, previous = 0;
+//float previousWeight = 0.0;
+//int stableCounter = 0;
+//int reading = 10;
+//float cb = 2550.0;
 
 int current_command = -1; 
 
@@ -24,22 +27,22 @@ void setup() {
   servo1.attach(11);
   servo2.attach(10);
   servo3.attach(9);
-  servo4.attach(8);
-  servo5.attach(7); 
+  servo4.attach(6);
+  servo5.attach(5);   
   servo1.write(0); 
-  servo2.write(0); 
+  servo2.write(180); 
   servo3.write(0);
   servo4.write(0);
   servo5.write(0);
 
-  scale.begin();
-  scale.start (2000);
-  scale.setCalFactor(2500.0);
-  scale.tare(); 
+  scale.begin(dataPin, clockPin);
+//  scale.start (2000);
+  scale.set_scale(2950.f);
+  scale.tare();
   
   lcd.begin();
   lcd.backlight();
-  lcd.clear();
+
 }
 
 void loop() {
@@ -70,7 +73,7 @@ void loop() {
     openServo4();
     displayScreen("Light Can Detected" + String('\t') + "Accepted");
     current_command = -1; 
-  } 
+  }
   // inductive detects a can but it is heavy
   else if (current_command == 4) { 
     openServo2();
@@ -102,20 +105,21 @@ void loop() {
     openServo3();
     displayScreen("Non-Bottle Object" + String('\t') + "Rejected");
     current_command = -1; 
-  } 
-/*
-  else if (current_command == 9) { 
-    double weight = getWeight();
-    sendResponse(String(weight));
-    displayScreen("Weight: " + String(weight) + " g");
-    current_command = -1; 
-  } */
-  
+  }
   else if (current_command == 9) {
     getWeight();
+//    sendResponse(String(stable_weight));
+//    Serial.println(stable_weight, 1); // Send weight with 1 decimal place
+    //displayScreen("Weight: " (getWeight()) " g");
     current_command = -1;
   }
-} 
+  }
+//  else if (current_command == 9) {
+//    double weight = getWeight();
+//    sendResponse(String(weight));
+//    
+//    current_command = -1;
+//  }
 
 void receiveCommand() {
   if (Serial.available()) {
@@ -131,88 +135,111 @@ void sendResponse(String data) {
 
 void closeServo1() {
   servo1.write(0); 
-  servo2.write(0); 
-  servo3.write(0);
-  servo4.write(0);
-  servo5.write(0);
+
 }
 
 void openServo1() {
   servo1.write(180);
-  servo2.write(0); 
-  servo3.write(0);
-  servo4.write(0);
-  servo5.write(0);
+
 }
 
 void openServo2() {
-  servo1.write(0);
-  servo2.write(180); 
-  servo3.write(0);
-  servo4.write(0);
-  servo5.write(0);
+  
+  servo2.write(0);
+//  delay(1000);
+//  servo2.write(0);
+
 }
 
 void openServo3() {
-  servo1.write(0);
-  servo2.write(0); 
+
   servo3.write(180);
-  servo4.write(0);
-  servo5.write(0);
+//  delay(1000);
+//  servo3.write(0);
+
 }
 
 void openServo4() {
-  servo1.write(0);
-  servo2.write(0); 
-  servo3.write(0);
+
   servo4.write(180);
-  servo5.write(0);
+//  delay(1000);
+//  servo4.write(0);
+
 }
 
 void openServo5() {
-  servo1.write(0);
-  servo2.write(180); 
-  servo3.write(0);
-  servo4.write(0);
+
   servo5.write(180);
+//  delay(1000);
+//  servo5.write(0);
 }
 
 void displayScreen(String message) {
   lcd.clear();  
-  lcd.setCursor(0, 0);  
-  lcd.print(message);
-  lcd.setCursor (0,1);
-  lcd.print (message);
+  lcd.setCursor(0, 0);  // Set cursor to the first line
+  lcd.print(message.substring(0, 20));  // Print the first 20 characters
+
+  if (message.length() > 20) {
+    lcd.setCursor(0, 1);  // Set cursor to the second line
+    lcd.print(message.substring(20));   // Print the rest of the message
+  }
 }
-/*
-double getWeight() {
-  scale.update();
-  w1 = scale.get_units(10);
-  delay(100);
-  w2 = scale.get_units();
-  while (abs(w1 - w2) > 10) {
-    w1 = w2;
-    w2 = scale.get_units();
-    delay(100);
-  }
-  double kilogram = w1 / 1000;
-  return kilogram;
-}*/
 
+
+//float getWeight(){
+//    scale.update();
+//    float weight = scale.getData();
+//    if (abs(weight - previousWeight) < 1.0) { // Change in weight is less than 1 gram
+//    stableCounter++; // Increase stable reading count
+//  } else {
+//    stableCounter = 0; // Reset counter if the weight changes significantly
+//  }
+//  previousWeight = weight;
+//
+//  if (stableCounter >= stabilityThreshold) {
+//        Serial.println(weight);  // Send weight to Raspberry Pi
+//      } else {
+//        Serial.println("Waiting");  // Send status message to Raspberry P
+//      }
+//      delay(500);
+//    
+//}
 void getWeight(){
-  scale.update();
-  float weight = scale.getData();
-    if (abs(weight - previousWeight) < 1.0) { // Change in weight is less than 1 gram
-    stableCounter++; // Increase stable reading count
-  } else {
-    stableCounter = 0; // Reset counter if the weight changes significantly
-  }
-  previousWeight = weight;
-
-  if (stableCounter >= stabilityThreshold) {
-        Serial.println(weight);  // Send weight to Raspberry Pi
-      } else {
-        Serial.println("Waiting");  // Send status message to Raspberry Pi
-      }
+  //scale.set_scale(2950.f);
+//  if (scale.is_ready()){
+//    float weight = scale.get_units(10);  // Average of 10 readings
+//    
+//    // Only send weight if it's within a reasonable range (stabilization)
+//    if (abs(weight) > 0.01) {  // Avoid sending noise data
+//      float gram = max (weight,0.0);
+//      //Serial.println(gram);
+//      sendResponse(String(gram));
+//      lcd.setCursor(0,1);
+//      lcd.print("Weight[g]:");
+//      lcd.setCursor(0,2);
+//      lcd.print(gram);
+//      }
+//  }
+//    else {
+//      //Serial.println("scale not ready");
+//       sendResponse(String("Scale not ready"));
+//    }
+//  
+//  delay(100);  // Delay 1 second between readings
+//}
+    w1 = scale.get_units(10);
+    delay(100);
+    w2 = scale.get_units();
+    while ((abs(w1-w2)>10)&&(w1<1))
+    {
+      w1=w2;
+      w2=scale.get_units();
       delay(100);
     }
+    float gram = abs(w1);
+//    lcd.setCursor(0,1);
+//    lcd.print("Weight[g]:");
+//    lcd.setCursor(0,2);
+//    lcd.print(gram);    
+    sendResponse(String(gram));
+}

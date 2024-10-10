@@ -1,27 +1,19 @@
 import serial
 import time
 
-# Set up the serial connection (check the correct port)
-arduino_port = '/dev/ttyUSB0'  # Replace with your Arduino's port
-baud_rate = 9600
-ser = serial.Serial(arduino_port, baud_rate, timeout=1)
-
-time.sleep(0.5)  # Allow time for the connection to establish
-
-def get_weight():
-    ser.write(b'r')  # Send command to Arduino to read weight
-    time.sleep(0.5)  # Wait for Arduino to respond
-    while ser.in_waiting == 0:  # Wait for response
-        pass
-    weight = ser.readline().decode('utf-8').strip()  # Read weight
-    return weight
+# Set up serial communication with Arduino
+arduino_serial = serial.Serial('/dev/ttyACM0', 9600, timeout=1)  # Adjust port if necessary
+time.sleep(2)  # Wait for the serial connection to initialize
 
 try:
     while True:
-        weight = get_weight()
-        print(weight)  # Print the weight received from Arduino
-        time.sleep(0.5)  # Delay between readings
+        # Read the data from Arduino
+        if arduino_serial.in_waiting > 0:
+            weight = arduino_serial.readline().decode('utf-8').strip()
+            print(f"Weight: {weight} grams")
+
 except KeyboardInterrupt:
-    print("Program stopped.")
+    print("Serial communication stopped")
+
 finally:
-    ser.close()  # Close the serial connection
+    arduino_serial.close()  # Close the serial connection

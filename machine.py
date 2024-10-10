@@ -6,18 +6,18 @@ import time
 class Machine:
     def __init__(self, port) -> None:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
-        self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
+        #self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
         self.arduino.flush()
         self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-        self.ultrasonic_trig_pin1 = 23
-        self.ultrasonic_echo_pin1 = 12
-        self.ultrasonic_trig_pin2 = 16
-        self.ultrasonic_echo_pin2 = 24
-        self.ultrasonic_trig_pin3 = 25
-        self.ultrasonic_echo_pin3 = 20
-        self.ultrasonic_trig_pin4 = 21
-        self.ultrasonic_echo_pin4 = 8
+        self.ultrasonic_trig_pin1 = 23  
+        self.ultrasonic_echo_pin1 = 24
+        self.ultrasonic_trig_pin2 = 25
+        self.ultrasonic_echo_pin2 = 8
+        self.ultrasonic_trig_pin3 = 7
+        self.ultrasonic_echo_pin3 = 1
+        self.ultrasonic_trig_pin4 = 12
+        self.ultrasonic_echo_pin4 = 16
 
         self.push_button = 5
         self.led_pin = 6
@@ -98,7 +98,7 @@ class Machine:
         '''
         self.send_command(3)
 
-    def open_servo_2_3(self):
+    def open_servo_2_3heavy(self):
         '''
         Open servo 2 and 3
         '''
@@ -133,18 +133,35 @@ class Machine:
         Get weight from load sensor
         '''
         self.send_command(9)
+        time.sleep(5)
+        response = self.get_arduino_response()
+        #while response:
+        print(response)
+        while not response:
+            response = self.get_arduino_response()
+            print(response)
+            #break
+        #print(response)
 
-        self.get_arduino_response()
-        weight_data = self.arduino.readline().decode('utf-8').strip()  # Read the weight data
-        
-        if weight_data == "Waiting":
-            return None  # Weight is not stable yet
-        else:
-            try:
-                return float(weight_data)  # Convert weight to a float
-            except ValueError:
-                return None  # Return None if invalid data is received
-
+        # return weight
+    
+        # while True:
+        # # Read the data from Arduino
+        #     if self.arduino.in_waiting > 0:
+        #         weight = self.arduino.readline().decode('utf-8').rstrip()
+        #         print(f"Weight: {weight} grams")
+        #     break
+    
+        # self.arduino.write(b'1\n')  # Send the '1' command followed by a newline
+        # time.sleep(0.5) 
+        # if self.arduino.in_waiting > 0:
+        #     weight = self.arduino.readline().decode('utf-8').strip()
+        #     try:
+        #         return float(weight)
+        #     except ValueError:
+        #         return None
+        # return None
+       
 
     def get_distance_tube(self):
         '''

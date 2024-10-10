@@ -133,35 +133,12 @@ class Machine:
         Get weight from load sensor
         '''
         self.send_command(9)
-        time.sleep(5)
+        time.sleep(3)
         response = self.get_arduino_response()
-        #while response:
-        print(response)
-        while not response:
-            response = self.get_arduino_response()
-            print(response)
-            #break
-        #print(response)
-
-        # return weight
-    
-        # while True:
-        # # Read the data from Arduino
-        #     if self.arduino.in_waiting > 0:
-        #         weight = self.arduino.readline().decode('utf-8').rstrip()
-        #         print(f"Weight: {weight} grams")
-        #     break
-    
-        # self.arduino.write(b'1\n')  # Send the '1' command followed by a newline
-        # time.sleep(0.5) 
-        # if self.arduino.in_waiting > 0:
-        #     weight = self.arduino.readline().decode('utf-8').strip()
-        #     try:
-        #         return float(weight)
-        #     except ValueError:
-        #         return None
-        # return None
-       
+        try:
+            return float(response)
+        except:
+            return None
 
     def get_distance_tube(self):
         '''
@@ -270,5 +247,10 @@ class Machine:
         '''
         Print to thermal printer
         '''
-        self.printer.text("msg")
+        self.printer.text(msg)
+
+    def cut_paper(self):
+        '''
+        Cut thermal paper
+        '''
         self.printer.cut()

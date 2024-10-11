@@ -6,9 +6,9 @@ import time
 class Machine:
     def __init__(self, port) -> None:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
-        #self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
+        self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
         self.arduino.flush()
-        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14]
 
         self.ultrasonic_trig_pin1 = 23  
         self.ultrasonic_echo_pin1 = 24
@@ -140,6 +140,38 @@ class Machine:
         except:
             return None
 
+
+
+    def close_servo_2_4(self):
+        '''
+        Open servo 2 and 4
+        '''
+        self.send_command(10)
+
+    def close_servo_2_3(self):
+        '''
+        Open servo 2 and 3
+        '''
+        self.send_command(11)
+
+    def close_servo2(self):
+        '''
+        Open servo 2
+        '''
+        self.send_command(12)
+
+    def close_servo_4_5(self):
+        '''
+        Open servo 2
+        '''
+        self.send_command(13)
+
+    def close_servo_3(self):
+        '''
+        Open servo 2
+        '''
+        self.send_command(14)
+
     def get_distance_tube(self):
         '''
         Get distance from ultrasonic sensor
@@ -208,7 +240,7 @@ class Machine:
         '''
         Get irbreak beam state from laser sensor
         '''
-        if GPIO.input(self.IR_SENSOR_PIN) == GPIO.LOW:
+        if GPIO.input(self.IR_SENSOR_PIN) == GPIO.HIGH:
             return 1
         return 0
     
@@ -218,7 +250,7 @@ class Machine:
 
         Returns 0 or 1
         '''
-        if GPIO.input(self.inductive_sensor_pin) == GPIO.HIGH:
+        if GPIO.input(self.inductive_sensor_pin) == GPIO.LOW:
             return 1
         return 0
     
@@ -242,7 +274,15 @@ class Machine:
             return True
         else:
             return False
-
+    
+    # def get_button_state_off(self):
+    #     '''
+    #     Get button state
+    #     '''
+    #     if GPIO.input(self.push_button) == GPIO.LOW:
+    #         return True
+    #     else:
+    #         return False
     def print(self, msg):
         '''
         Print to thermal printer

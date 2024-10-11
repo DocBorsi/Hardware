@@ -29,6 +29,7 @@ def create_ticket(points):
     return ticket_data
 
 def get_size():
+    machine.get_distance_small() < 8
     if machine.get_distance_small():
         if machine.get_distance_medium():
             if machine.get_distance_large():
@@ -42,6 +43,8 @@ category = ""
 size = ""
 started = False
 finished = False
+
+last_debounce =time.time()
 
 while True:
     if not started:
@@ -69,16 +72,19 @@ while True:
         started = False
     
     if started:
-        button_pressed = machine.get_button_state()
-        if button_pressed:
-            finished = True
-            continue
-
-        machine.open_servo_1()
-        # Waiting for distance to be less than 20
+        current =time.time()
+        if (current-last_debounce)>3:
+            last_debounce = current
+            button_pressed = machine.get_button_state()
+            if button_pressed:
+                print('Button is pressed again, finishing')
+                machine.open_servo_1()
+                finished = True
+                continue
+            # Waiting for distance to be less than 20
         distance = machine.get_distance_tube()
-        if distance < 20:
-            machine.close_servo_2()
+        if distance < 8:
+            machine.close_servo_1()
             is_inductive = machine.get_inductive_state()
             # If inductive (can, metal, etc)
             if is_inductive:
@@ -93,13 +99,17 @@ while True:
                     print('Error getting weight!')
                     machine.open_servo_2_3heavy()
                     # Add closing
+                    time.sleep(5)
+                    machine.close_servo_2_3()
                     started = False
                     continue 
                 
-                if weight >= 5.00 and weight <= 50.0:
+                if weight >= 3.00 and weight <= 25.0:
                     machine.open_servo_2_4() # Accept
                     machine.turn_on_led()
                     # Add closing
+                    time.sleep(5)
+                    machine.close_servo_2_4()
                     category = "can"
                     point = get_points(category, size)
                     total_points += point
@@ -109,6 +119,8 @@ while True:
                 
                 machine.open_servo_2_3heavy()
                 # Add closing
+                time.sleep(5)
+                machine.close_servo_2_3()
                 started = False
                 continue
 
@@ -121,30 +133,51 @@ while True:
                     if weight is not None:
                         break
                     retry -= 1
+
                 else:
                     print('Error getting weight!')
                     machine.open_servo_2_3heavy()
-                    # Add closing
+                    # Add closing#
+                    time.sleep(5)
+                    machine.close_servo_2_3
                     started = False
                     continue 
-                
-                size = get_size()
-                if not size:
+
+                if weight >= 3.00 and weight <= 25.0:
+                    machine.open_servo_2() # Accept
+                    machine.turn_on_led()
+                    # Add closing
+                    time.sleep(5)
+                    machine.close_servo2()
+                    size = get_size()
+                    if not size:
+                        started = False
+                        continue
+                    
+                    print(f"Size: {size}")
+                    is_opaque = machine.get_irbreakbeam_state()
+                    if not is_opaque:
+                        machine.open_servo_4_5()
+                        machine.turn_on_led()
+                        time.sleep(5)
+                        machine.close_servo_4_5
+                        category = "plastic"
+                        point = get_points(category, size)
+                        total_points += point
+                        category = ''
+                        size = ''
+                        continue
+                    machine.open_servo_3()
+                    time.sleep(5)
+                    machine.close_servo_3()
                     started = False
                     continue
-                
-                print(f"Size: {size}")
 
-                is_opaque = machine.get_irbreakbeam_state()
-                if not is_opaque:
-                    machine.open_servo_4_5()
-                    machine.turn_on_led()
-                    category = "plastic"
-                    point = get_points(category, size)
-                    total_points += point
-                    category = ''
-                    size = ''
-                    continue
-                machine.open_servo_3()
+                machine.open_servo_2_3()
+                # Add closing
+                time.sleep(5)
+                machine.close_servo_2_3()
                 started = False
                 continue
+
+                

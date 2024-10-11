@@ -25,13 +25,13 @@ void setup() {
   Serial.begin(9600); 
 
   servo1.attach(11);
-  servo2.attach(10);
-  servo3.attach(9);
-  servo4.attach(6);
-  servo5.attach(5);   
-  servo1.write(0); 
-  servo2.write(180); 
-  servo3.write(0);
+  servo2.attach(4);
+  servo3.attach(3);
+  servo4.attach(2);
+  servo5.attach(1);   
+  servo1.write(170); 
+  servo2.write(90); 
+  servo3.write(5);
   servo4.write(0);
   servo5.write(0);
 
@@ -92,7 +92,7 @@ void loop() {
     openServo3();
     displayScreen("Unknown Heavy Object" + String('\t') + "Rejected");
     current_command = -1; 
-  } 
+  }
   // IR break beam detects a plastic bottle
   else if (current_command == 7) { 
     openServo4();
@@ -108,11 +108,32 @@ void loop() {
   }
   else if (current_command == 9) {
     getWeight();
-//    sendResponse(String(stable_weight));
-//    Serial.println(stable_weight, 1); // Send weight with 1 decimal place
-    //displayScreen("Weight: " (getWeight()) " g");
     current_command = -1;
   }
+  else if (current_command == 10) { 
+    closeServo2();
+    closeServo4();
+    current_command = -1; 
+  }
+  else if (current_command == 11) { 
+    closeServo2();
+    closeServo3();
+    current_command = -1; 
+  }
+  else if (current_command == 12) { 
+    closeServo2();
+    current_command = -1; 
+  }
+  else if (current_command == 13) { 
+    closeServo4();
+    closeServo5();
+    current_command = -1; 
+  } 
+  else if (current_command == 14) { 
+    closeServo3();
+    current_command = -1; 
+  }
+  delay(500); 
   }
 //  else if (current_command == 9) {
 //    double weight = getWeight();
@@ -134,44 +155,62 @@ void sendResponse(String data) {
 }
 
 void closeServo1() {
-  servo1.write(0); 
+  servo1.write(170); 
 
 }
 
+void closeServo2() {
+  
+  servo2.write(90);
+
+}
+
+void closeServo3() {
+
+  servo3.write(5);
+
+}
+
+void closeServo4() {
+
+  servo4.write(0);
+
+}
+
+void closeServo5() {
+
+
+  servo5.write(0);
+}
+
 void openServo1() {
-  servo1.write(180);
+  servo1.write(80);
 
 }
 
 void openServo2() {
   
-  servo2.write(0);
-//  delay(1000);
-//  servo2.write(0);
+  servo2.write(180);
 
 }
 
 void openServo3() {
 
-  servo3.write(180);
-//  delay(1000);
-//  servo3.write(0);
+  servo3.write(110);
+
 
 }
 
 void openServo4() {
 
-  servo4.write(180);
-//  delay(1000);
-//  servo4.write(0);
+  servo4.write(90);
+
 
 }
 
 void openServo5() {
 
   servo5.write(180);
-//  delay(1000);
-//  servo5.write(0);
 }
 
 void displayScreen(String message) {

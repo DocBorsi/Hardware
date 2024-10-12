@@ -3,12 +3,18 @@ from machine import Machine
 # import requests
 
 machine = Machine (port='/dev/ttyACM0')
-s = machine.get_distance_small()
-print(s)
-v = machine.get_distance_medium()
-print(v)
-l = machine.get_distance_large()
-print(l)
+
+def get_size():
+    if machine.get_distance_small() < 9:
+        if machine.get_distance_medium() < 9:
+            if machine.get_distance_large() < 9:
+                return "large"
+            return "medium"
+        return "small"
+    return None
+
+size = get_size()
+print(size)
 
 #machine.get_distance_small()
 # machine.open_servo_1()

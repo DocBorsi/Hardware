@@ -1,20 +1,23 @@
 from machine import Machine
-#import time
-# import requests
+# import time
+import requests
 
 machine = Machine (port='/dev/ttyACM0')
 
-def get_size():
-    if machine.get_distance_small() < 9:
-        if machine.get_distance_medium() < 9:
-            if machine.get_distance_large() < 9:
-                return "large"
-            return "medium"
-        return "small"
-    return None
+# def get_size():
+#     if machine.get_distance_small() < 9:
+#         if machine.get_distance_medium() < 9:
+#             if machine.get_distance_large() < 9:
+#                 return "large"
+#             return "medium"
+#         return "small"
+#     return None
 
-size = get_size()
-print(size)
+# size = get_size()
+# print(size)
+
+# value = machine.get_irbreakbeam_state()
+# print(value)
 
 #machine.get_distance_small()
 # machine.open_servo_1()
@@ -33,8 +36,20 @@ print(size)
 #     print(m)
 #     l = machine.get_distance_large()
 #     print(l)
+# def create_ticket(points):
+#     params = {
+#         "points": points
+#     }
+#     response = requests.get(f"http://127.0.0.1:8000/point/create/?", params=params)
+#     print(response)
+#     ticket_data = response.json()
+#     return ticket_data
+
+# value = create_ticket(10)
+# print(value)
 
 # while True:
+#     machine.open_servo_1()
 #     machine.send_command(9)
 #     time.sleep(3)
 #     response = machine.get_arduino_response()
@@ -47,7 +62,7 @@ print(size)
 # machine.close_servo_2_4()
 # machine.open_servo_2_3heavy()
 
-# machine.print("TEST")
+# w = machine.print("TEST")
 # print (w)
 # while w != 'e':
 #     machine.open_servo_2()

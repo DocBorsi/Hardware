@@ -60,7 +60,8 @@ while True:
             finished = False
             started = False
             continue
- 
+        
+        machine.close_servo_1()
         data = create_ticket(total_points)
         print(f"New ticket: {data.get('code')} - {data.get('point')}")
         machine.print("********************************")
@@ -118,10 +119,11 @@ while True:
                     machine.close_servo_2_3()
                     started = False
                     servo_opened = False
+                    time.sleep(3)
                     continue
                 print(f'Weight: {weight}')
  
-                if weight >= 3.00 and weight <= 25.0:
+                if weight >= 1.00 and weight <= 25.0:
                     print('Weight passed, accept...')
                     machine.open_servo_2_4() # Accept
                     machine.turn_on_led()
@@ -134,6 +136,7 @@ while True:
                     category = ''
                     size = ''
                     servo_opened = False
+                    time.sleep(3)
                     continue
  
                 print('Weight did not pass, rejecting...')
@@ -142,6 +145,7 @@ while True:
                 time.sleep(5)
                 machine.close_servo_2_3()
                 started = False
+                time.sleep(3)
                 continue
  
             # If not inductive (e.g. plastics)
@@ -160,13 +164,14 @@ while True:
                     machine.open_servo_2_3heavy()
                     # Add closing#
                     time.sleep(5)
-                    machine.close_servo_2_3
+                    machine.close_servo_2_3()
                     started = False
                     servo_opened = False
+                    time.sleep(3)
                     continue 
                 print(f'Weight: {weight}')
  
-                if weight >= 3.00 and weight <= 25.0:
+                if weight >= 1.00 and weight <= 25.0:
                     print('Weight passed, accept...')
                     machine.open_servo_2() # Accept
                     machine.turn_on_led()
@@ -178,23 +183,25 @@ while True:
                     print(f"Size: {size}")
 
                     if not size:
+                        print('Size did not pass')
                         started = False
                         continue
  
                     is_opaque = machine.get_irbreakbeam_state()
                     print(f'Opaque: {is_opaque}')
-                    if not is_opaque:
+                    if is_opaque:
                         print(f'Not opaque, accepting...')
                         machine.open_servo_4_5()
                         machine.turn_on_led()
                         time.sleep(5)
-                        machine.close_servo_4_5
+                        machine.close_servo_4_5()
                         category = "plastic"
                         point = get_points(category, size)
                         total_points += point
                         category = ''
                         size = ''
                         servo_opened = False
+                        time.sleep(3)
                         continue
  
                     print(f'Opaque, rejecting...')
@@ -203,6 +210,7 @@ while True:
                     machine.close_servo_3()
                     started = False
                     servo_opened = False
+                    time.sleep(3)
                     continue
  
                 print('Weight did not pass, rejecting...')
@@ -212,4 +220,5 @@ while True:
                 machine.close_servo_2_3()
                 started = False
                 servo_opened = False
+                time.sleep(3)
                 continue

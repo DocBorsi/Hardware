@@ -176,8 +176,10 @@ class Machine:
         GPIO.output(self.ultrasonic_trig_pin1, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin1, False)
+        pulse_start = time.time()
         while GPIO.input(self.ultrasonic_echo_pin1) == 0:
             pulse_start = time.time()
+        pulse_end = time.time()
         while GPIO.input(self.ultrasonic_echo_pin1) == 1:
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
@@ -192,12 +194,11 @@ class Machine:
         GPIO.output(self.ultrasonic_trig_pin4, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin4, False)
+        pulse_start = time.time()
         while GPIO.input(self.ultrasonic_echo_pin4) == 0:
             pulse_start = time.time()
+        pulse_end = time.time()
         while GPIO.input(self.ultrasonic_echo_pin4) == 1:
-            # if time.time()- pulse_start>10:
-            #     time.sleep(10)
-            #     return None
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = pulse_duration * 17150
@@ -211,12 +212,11 @@ class Machine:
         GPIO.output(self.ultrasonic_trig_pin3, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin3, False)
+        pulse_start = time.time()
         while GPIO.input(self.ultrasonic_echo_pin3) == 0:
             pulse_start = time.time()
+        pulse_end = time.time()
         while GPIO.input(self.ultrasonic_echo_pin3) == 1:
-            # if time.time()- pulse_start>10:
-            #     time.sleep(10)
-            #     return None
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = pulse_duration * 17150
@@ -230,12 +230,11 @@ class Machine:
         GPIO.output(self.ultrasonic_trig_pin2, True)
         time.sleep(0.00001)
         GPIO.output(self.ultrasonic_trig_pin2, False)
+        pulse_start = time.time()
         while GPIO.input(self.ultrasonic_echo_pin2) == 0:
             pulse_start = time.time()
+        pulse_end = time.time()
         while GPIO.input(self.ultrasonic_echo_pin2) == 1:
-            # if time.time()- pulse_start>10:
-            #     time.sleep(10)
-            #     return None
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = pulse_duration * 17150

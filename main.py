@@ -76,11 +76,11 @@ while True:
         servo_opened = False
  
     if started:
-        current =time.time()
+        current = time.time()
         if (current-last_debounce) > 3:
-            last_debounce = current
             button_pressed = machine.get_button_state()
             if button_pressed:
+                last_debounce = current
                 print('Button is pressed again, finishing')
                 finished = True
                 continue

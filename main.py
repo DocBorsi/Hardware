@@ -119,7 +119,6 @@ while True:
                     # Add closing
                     time.sleep(5)
                     machine.close_servo_2_3()
-                    started = False
                     servo_opened = False
                     time.sleep(3)
                     continue
@@ -146,7 +145,7 @@ while True:
                 # Add closing
                 time.sleep(5)
                 machine.close_servo_2_3()
-                started = False
+                servo_opened = False
                 time.sleep(3)
                 continue
  
@@ -167,7 +166,6 @@ while True:
                     # Add closing#
                     time.sleep(5)
                     machine.close_servo_2_3()
-                    started = False
                     servo_opened = False
                     time.sleep(3)
                     continue 
@@ -186,7 +184,6 @@ while True:
 
                     if not size:
                         print('Size did not pass')
-                        started = False
                         continue
  
                     is_opaque = machine.get_irbreakbeam_state()
@@ -210,7 +207,6 @@ while True:
                     machine.open_servo_3()
                     time.sleep(5)
                     machine.close_servo_3()
-                    started = False
                     servo_opened = False
                     time.sleep(3)
                     continue
@@ -220,7 +216,6 @@ while True:
                 # Add closing
                 time.sleep(5)
                 machine.close_servo_2_3()
-                started = False
                 servo_opened = False
                 time.sleep(3)
                 continue

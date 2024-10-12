@@ -50,7 +50,6 @@ while True:
     current = time.time()
     if not started and (current - last_debounce) > 3:
         button_pressed = machine.get_button_state()
-        print(f'Start button pressed: {button_pressed}')
         if button_pressed:
             started = True
             last_debounce = time.time()
@@ -81,7 +80,6 @@ while True:
     if started:
         if (current - last_debounce) > 3:
             button_pressed = machine.get_button_state()
-            print(f'Stop button pressed: {button_pressed}')
             if button_pressed:
                 last_debounce = current
                 print('Button is pressed again, finishing')

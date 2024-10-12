@@ -29,10 +29,9 @@ def create_ticket(points):
     return ticket_data
  
 def get_size():
-    #machine.get_distance_small() < 8
-    if machine.get_distance_small():
-        if machine.get_distance_medium():
-            if machine.get_distance_large():
+    if machine.get_distance_small() < 9:
+        if machine.get_distance_medium() < 9:
+            if machine.get_distance_large() < 9:
                 return "large"
             return "medium"
         return "small"

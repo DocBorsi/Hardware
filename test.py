@@ -1,8 +1,19 @@
 from machine import Machine
 # import time
-import requests
+# import requests
 
 machine = Machine (port='/dev/ttyACM0')
+
+# print("Calling get_distance_small()")
+# s = machine.get_distance_small()
+# print(s)
+# m = machine.get_distance_medium()
+# print(m)
+# l = machine.get_distance_large()
+# print(l)
+t = machine.get_distance_tube()
+print(t)
+
 
 # def get_size():
 #     if machine.get_distance_small() < 9:
@@ -19,7 +30,7 @@ machine = Machine (port='/dev/ttyACM0')
 # value = machine.get_irbreakbeam_state()
 # print(value)
 
-#machine.get_distance_small()
+
 # machine.open_servo_1()
 # machine.open_servo_2()
 # machine.open_servo_3()

@@ -59,6 +59,7 @@ while True:
             print('No points')
             finished = False
             started = False
+            servo_opened = False
             continue
         
         machine.close_servo_1()
@@ -77,8 +78,10 @@ while True:
  
     if started:
         current = time.time()
+        print(current)
         if (current-last_debounce) > 3:
             button_pressed = machine.get_button_state()
+            print(button_pressed)
             if button_pressed:
                 last_debounce = current
                 print('Button is pressed again, finishing')
@@ -91,9 +94,10 @@ while True:
             servo_opened = True
  
         # Waiting for distance to be less than 20
+        time.sleep(2)
         distance = machine.get_distance_tube()
-       #print (f'Distance:{distance}')
-        if distance < 8:
+        print (f'Distance:{distance}')
+        if distance < 9:
             print (f'Distance:{distance}')
             machine.close_servo1()
             print('Servo 1 closed')
@@ -123,7 +127,7 @@ while True:
                     continue
                 print(f'Weight: {weight}')
  
-                if weight >= 1.00 and weight <= 25.0:
+                if weight >= 0.30 and weight <= 25.0:
                     print('Weight passed, accept...')
                     machine.open_servo_2_4() # Accept
                     machine.turn_on_led()

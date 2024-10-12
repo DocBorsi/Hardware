@@ -110,7 +110,7 @@ void loop() {
     getWeight();
     current_command = -1;
   }
-  else if (current_command == 10) { 
+  else if (current_command ==10) {
     closeServo2();
     closeServo4();
     current_command = -1; 
@@ -135,13 +135,7 @@ void loop() {
   }
   delay(500); 
   }
-//  else if (current_command == 9) {
-//    double weight = getWeight();
-//    sendResponse(String(weight));
-//    
-//    current_command = -1;
-//  }
-
+  
 void receiveCommand() {
   if (Serial.available()) {
     int sent = Serial.readStringUntil('\n').toInt();

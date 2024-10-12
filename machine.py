@@ -8,7 +8,7 @@ class Machine:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
         self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
         self.arduino.flush()
-        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14]
+        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
         self.ultrasonic_trig_pin1 = 23  
         self.ultrasonic_echo_pin1 = 24
@@ -19,7 +19,7 @@ class Machine:
         self.ultrasonic_trig_pin4 = 12
         self.ultrasonic_echo_pin4 = 16
 
-        self.push_button = 5
+        self.push_button = 26
         self.led_pin = 6
         self.inductive_sensor_pin = 17
         self.IR_SENSOR_PIN = 27
@@ -38,7 +38,6 @@ class Machine:
     
         GPIO.setup(self.push_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.led_pin, GPIO.OUT)
-        GPIO.setup(self.led_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.IR_SENSOR_PIN, GPIO.IN)
         GPIO.setup(self.inductive_sensor_pin, GPIO.IN)
         
@@ -86,7 +85,7 @@ class Machine:
         '''
         self.send_command(1)
 
-    def close_servo_2(self):
+    def close_servo1(self):
         '''
         Close servo 1
         '''
@@ -139,9 +138,7 @@ class Machine:
             return float(response)
         except:
             return None
-
-
-
+        
     def close_servo_2_4(self):
         '''
         Open servo 2 and 4
@@ -192,12 +189,15 @@ class Machine:
         '''
         Get distance from ultrasonic sensor
         '''
-        GPIO.output(self.ultrasonic_trig_pin2, True)
+        GPIO.output(self.ultrasonic_trig_pin4, True)
         time.sleep(0.00001)
-        GPIO.output(self.ultrasonic_trig_pin2, False)
-        while GPIO.input(self.ultrasonic_echo_pin2) == 0:
+        GPIO.output(self.ultrasonic_trig_pin4, False)
+        while GPIO.input(self.ultrasonic_echo_pin4) == 0:
             pulse_start = time.time()
-        while GPIO.input(self.ultrasonic_echo_pin2) == 1:
+        while GPIO.input(self.ultrasonic_echo_pin4) == 1:
+            # if time.time()- pulse_start>10:
+            #     time.sleep(10)
+            #     return None
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = pulse_duration * 17150
@@ -214,6 +214,9 @@ class Machine:
         while GPIO.input(self.ultrasonic_echo_pin3) == 0:
             pulse_start = time.time()
         while GPIO.input(self.ultrasonic_echo_pin3) == 1:
+            # if time.time()- pulse_start>10:
+            #     time.sleep(10)
+            #     return None
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = pulse_duration * 17150
@@ -224,12 +227,15 @@ class Machine:
         '''
         Get distance from ultrasonic sensor
         '''
-        GPIO.output(self.ultrasonic_trig_pin4, True)
+        GPIO.output(self.ultrasonic_trig_pin2, True)
         time.sleep(0.00001)
-        GPIO.output(self.ultrasonic_trig_pin4, False)
-        while GPIO.input(self.ultrasonic_echo_pin4) == 0:
+        GPIO.output(self.ultrasonic_trig_pin2, False)
+        while GPIO.input(self.ultrasonic_echo_pin2) == 0:
             pulse_start = time.time()
-        while GPIO.input(self.ultrasonic_echo_pin4) == 1:
+        while GPIO.input(self.ultrasonic_echo_pin2) == 1:
+            # if time.time()- pulse_start>10:
+            #     time.sleep(10)
+            #     return None
             pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = pulse_duration * 17150

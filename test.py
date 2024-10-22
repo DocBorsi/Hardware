@@ -11,8 +11,8 @@ machine = Machine (port='/dev/ttyACM0')
 # print(m)
 # l = machine.get_distance_large()
 # print(l)
-t = machine.get_distance_tube()
-print(t)
+# t = machine.get_distance_tube()
+# print(t)
 
 
 # def get_size():
@@ -82,7 +82,8 @@ print(t)
 # print(value)
 # value = machine.get_irbreakbeam_state()
 # print(value)
-#weight = machine.get_weight()
+# weight = machine.get_weight()
+# print(weight)
 # # # 
 # if weight >= 1:
 #     machine.open_servo_2()
@@ -115,9 +116,9 @@ print(t)
 #             time.sleep(0.1)  # Adjust this delay as needed
 
 # # time.sleep(5)
-# while True:
-#     value = machine.get_button_state()
-#     print(value)
+while True:
+    value = machine.get_button_state()
+    print(value)
 
 #params = {
 #    "category": "plastic",

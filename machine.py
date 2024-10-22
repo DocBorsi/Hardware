@@ -14,13 +14,13 @@ class Machine:
         self.ultrasonic_echo_pin1 = 24
         self.ultrasonic_trig_pin2 = 25
         self.ultrasonic_echo_pin2 = 8
-        self.ultrasonic_trig_pin3 = 7
-        self.ultrasonic_echo_pin3 = 1
-        self.ultrasonic_trig_pin4 = 12
-        self.ultrasonic_echo_pin4 = 16
+        self.ultrasonic_trig_pin3 = 12
+        self.ultrasonic_echo_pin3 = 16
+        self.ultrasonic_trig_pin4 = 20
+        self.ultrasonic_echo_pin4 = 21
 
-        self.push_button = 26
-        self.led_pin = 6
+        self.push_button = 22
+        self.led_pin = 13
         self.inductive_sensor_pin = 17
         self.IR_SENSOR_PIN = 27
     

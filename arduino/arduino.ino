@@ -25,15 +25,15 @@ void setup() {
   Serial.begin(9600); 
 
   servo1.attach(11);
-  servo2.attach(4);
-  servo3.attach(3);
-  servo4.attach(2);
-  servo5.attach(1);   
+  servo2.attach(10);
+  servo3.attach(4);
+  servo4.attach(3);
+  servo5.attach(2);   
   servo1.write(170); 
   servo2.write(90); 
   servo3.write(5);
-  servo4.write(0);
-  servo5.write(0);
+  servo4.write(1);
+  servo5.write(90);
 
   scale.begin(dataPin, clockPin);
 //  scale.start (2000);
@@ -167,18 +167,18 @@ void closeServo3() {
 
 void closeServo4() {
 
-  servo4.write(0);
+  servo4.write(1);
 
 }
 
 void closeServo5() {
 
 
-  servo5.write(0);
+  servo5.write(90);
 }
 
 void openServo1() {
-  servo1.write(80);
+  servo1.write(70);
 
 }
 
@@ -204,7 +204,7 @@ void openServo4() {
 
 void openServo5() {
 
-  servo5.write(180);
+  servo5.write(0);
 }
 
 void displayScreen(String message) {

@@ -52,10 +52,12 @@ while True:
         button_pressed = machine.get_button_state()
         if button_pressed:
             started = True
+            print('started')
             last_debounce = time.time()
             continue
  
     if finished:
+        machine.close_servo_1()
         if total_points == 0:
             print('No points')
             finished = False
@@ -63,7 +65,6 @@ while True:
             servo_opened = False
             continue
         
-        machine.close_servo_1()
         data = create_ticket(total_points)
         print(f"New ticket: {data.get('code')} - {data.get('point')}")
         machine.print("********************************")
@@ -124,7 +125,7 @@ while True:
                     continue
                 print(f'Weight: {weight}')
  
-                if weight >= 0.30 and weight <= 25.0:
+                if weight >= 1.00 and weight <= 25.0:
                     print('Weight passed, accept...')
                     machine.open_servo_2_4() # Accept
                     machine.turn_on_led()
@@ -184,6 +185,7 @@ while True:
 
                     if not size:
                         print('Size did not pass')
+                        servo_opened = False
                         continue
  
                     is_opaque = machine.get_irbreakbeam_state()

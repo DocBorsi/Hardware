@@ -40,7 +40,7 @@ void setup() {
   scale.set_scale(2950.f);
   scale.tare();
   
-  lcd.begin();
+  lcd.init();
   lcd.backlight();
 
 }

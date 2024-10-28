@@ -84,11 +84,16 @@ while True:
             if button_pressed:
                 last_debounce = current
                 print('Button is pressed again, finishing')
+                machine.turn_off_led()
+                machine.turn_off_red()
+                machine.turn_off_green()
+                machine.turn_off_blue()
                 finished = True
                 continue
  
         if not servo_opened:
             machine.open_servo_1()
+            machine.turn_on_led()
             print('Servo 1 opened')
             servo_opened = True
  
@@ -128,7 +133,9 @@ while True:
                 if weight >= 1.00 and weight <= 25.0:
                     print('Weight passed, accept...')
                     machine.open_servo_2_4() # Accept
-                    machine.turn_on_led()
+                    machine.turn_off_red()
+                    machine.turn_on_green()
+                    machine.turn_off_blue()
                     # Add closing
                     time.sleep(5)
                     machine.close_servo_2_4()
@@ -143,6 +150,9 @@ while True:
  
                 print('Weight did not pass, rejecting...')
                 machine.open_servo_2_3heavy()
+                machine.turn_on_red()
+                machine.turn_off_green()
+                machine.turn_off_blue()
                 # Add closing
                 time.sleep(5)
                 machine.close_servo_2_3()
@@ -175,7 +185,9 @@ while True:
                 if weight >= 1.00 and weight <= 25.0:
                     print('Weight passed, accept...')
                     machine.open_servo_2() # Accept
-                    machine.turn_on_led()
+                    machine.turn_off_red()
+                    machine.turn_on_green()
+                    machine.turn_off_blue()
                     # Add closing
                     time.sleep(5)
                     machine.close_servo2()
@@ -193,7 +205,9 @@ while True:
                     if is_opaque:
                         print(f'Not opaque, accepting...')
                         machine.open_servo_4_5()
-                        machine.turn_on_led()
+                        machine.turn_off_red()
+                        machine.turn_on_green()
+                        machine.turn_off_blue()
                         time.sleep(5)
                         machine.close_servo_4_5()
                         category = "plastic"
@@ -207,6 +221,9 @@ while True:
  
                     print(f'Opaque, rejecting...')
                     machine.open_servo_3()
+                    machine.turn_on_red()
+                    machine.turn_off_green()
+                    machine.turn_off_blue()
                     time.sleep(5)
                     machine.close_servo_3()
                     servo_opened = False
@@ -215,6 +232,9 @@ while True:
  
                 print('Weight did not pass, rejecting...')
                 machine.open_servo_2_3()
+                machine.turn_on_red()
+                machine.turn_off_green()
+                machine.turn_off_blue()
                 # Add closing
                 time.sleep(5)
                 machine.close_servo_2_3()

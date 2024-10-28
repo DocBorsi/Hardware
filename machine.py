@@ -21,6 +21,9 @@ class Machine:
 
         self.push_button = 22
         self.led_pin = 13
+        self.led_red = 5
+        self.led_green = 6
+        self.led_blue = 26
         self.inductive_sensor_pin = 17
         self.IR_SENSOR_PIN = 27
     
@@ -37,6 +40,9 @@ class Machine:
         GPIO.setup(self.ultrasonic_echo_pin4, GPIO.IN)
     
         GPIO.setup(self.push_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.led_red, GPIO.OUT)
+        GPIO.setup(self.led_green, GPIO.OUT)
+        GPIO.setup(self.led_blue, GPIO.OUT)
         GPIO.setup(self.led_pin, GPIO.OUT)
         GPIO.setup(self.IR_SENSOR_PIN, GPIO.IN)
         GPIO.setup(self.inductive_sensor_pin, GPIO.IN)
@@ -270,6 +276,43 @@ class Machine:
         Turn off LED light
         '''
         GPIO.output(self.led_pin, GPIO.LOW)
+
+    def turn_on_red(self):
+        '''
+        Turn on LED light
+        '''
+        GPIO.output(self.led_red, GPIO.HIGH)
+
+    def turn_off_red(self):
+        '''
+        Turn off LED light
+        '''
+        GPIO.output(self.led_red, GPIO.LOW)
+
+    def turn_on_blue(self):
+        '''
+        Turn on LED light
+        '''
+        GPIO.output(self.led_blue, GPIO.HIGH)
+
+    def turn_off_blue(self):
+        '''
+        Turn off LED light
+        '''
+        GPIO.output(self.led_blue, GPIO.LOW)
+
+    def turn_on_green(self):
+        '''
+        Turn on LED light
+        '''
+        GPIO.output(self.led_green, GPIO.HIGH)
+
+    def turn_off_green(self):
+        '''
+        Turn off LED light
+        '''
+        GPIO.output(self.led_green, GPIO.LOW)
+
 
     def get_button_state(self):
         '''

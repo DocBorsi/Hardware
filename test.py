@@ -1,5 +1,5 @@
 from machine import Machine
-# import time
+import time
 # import requests
 
 machine = Machine (port='/dev/ttyACM0')
@@ -13,7 +13,7 @@ machine = Machine (port='/dev/ttyACM0')
 # print(l)
 # t = machine.get_distance_tube()
 # print(t)
-
+# machine.turn_on_blue()
 
 # def get_size():
 #     if machine.get_distance_small() < 9:
@@ -79,9 +79,10 @@ machine = Machine (port='/dev/ttyACM0')
 #     machine.open_servo_2()
 # # machine.turn_on_led()
 # value = machine.get_inductive_state()
-# print(value)
-# value = machine.get_irbreakbeam_state()
-# print(value)
+# print(value
+# while True:
+#     value = machine.get_button_state()
+#     print(value)
 # weight = machine.get_weight()
 # print(weight)
 # # # 
@@ -115,10 +116,12 @@ machine = Machine (port='/dev/ttyACM0')
 #             # You can add a small sleep to avoid excessive CPU usage
 #             time.sleep(0.1)  # Adjust this delay as needed
 
-# # time.sleep(5)
+time.sleep(5)
 while True:
     value = machine.get_button_state()
-    print(value)
+
+    if value is True:
+        machine.open_servo_1()
 
 #params = {
 #    "category": "plastic",

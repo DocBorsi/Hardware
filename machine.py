@@ -6,7 +6,7 @@ import time
 class Machine:
     def __init__(self, port) -> None:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
-        self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
+        # self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
         self.arduino.flush()
         self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
@@ -20,7 +20,9 @@ class Machine:
         self.ultrasonic_echo_pin4 = 21
 
         self.push_button = 22
-        self.led_pin = 13
+        self.led_red1 = 13
+        self.led_green1 = 10
+        self.led_blue1 = 9
         self.led_red = 5
         self.led_green = 6
         self.led_blue = 26
@@ -39,11 +41,14 @@ class Machine:
         GPIO.setup(self.ultrasonic_trig_pin4, GPIO.OUT)
         GPIO.setup(self.ultrasonic_echo_pin4, GPIO.IN)
     
-        GPIO.setup(self.push_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.push_button, GPIO.IN)
+        # , pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.led_red1, GPIO.OUT)
+        GPIO.setup(self.led_green1, GPIO.OUT)
+        GPIO.setup(self.led_blue1, GPIO.OUT)
         GPIO.setup(self.led_red, GPIO.OUT)
         GPIO.setup(self.led_green, GPIO.OUT)
         GPIO.setup(self.led_blue, GPIO.OUT)
-        GPIO.setup(self.led_pin, GPIO.OUT)
         GPIO.setup(self.IR_SENSOR_PIN, GPIO.IN)
         GPIO.setup(self.inductive_sensor_pin, GPIO.IN)
         
@@ -264,18 +269,42 @@ class Machine:
         if GPIO.input(self.inductive_sensor_pin) == GPIO.LOW:
             return 1
         return 0
-    
-    def turn_on_led(self):
+
+    def turn_on_red1(self):
         '''
         Turn on LED light
         '''
-        GPIO.output(self.led_pin, GPIO.HIGH)
+        GPIO.output(self.led_red1, GPIO.HIGH)
 
-    def turn_off_led(self):
+    def turn_off_red1(self):
         '''
         Turn off LED light
         '''
-        GPIO.output(self.led_pin, GPIO.LOW)
+        GPIO.output(self.led_red1, GPIO.LOW)
+
+    def turn_on_blue1(self):
+        '''
+        Turn on LED light
+        '''
+        GPIO.output(self.led_blue1, GPIO.HIGH)
+
+    def turn_off_blue1(self):
+        '''
+        Turn off LED light
+        '''
+        GPIO.output(self.led_blue1, GPIO.LOW)
+
+    def turn_on_green1(self):
+        '''
+        Turn on LED light
+        '''
+        GPIO.output(self.led_green1, GPIO.HIGH)
+
+    def turn_off_green1(self):
+        '''
+        Turn off LED light
+        '''
+        GPIO.output(self.led_green1, GPIO.LOW)
 
     def turn_on_red(self):
         '''

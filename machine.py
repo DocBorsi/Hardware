@@ -22,7 +22,7 @@ class Machine:
         self.push_button = 22
         self.led_red1 = 13
         self.led_green1 = 10
-        self.led_blue1 = 9
+        self.led_blue1 = 7
         self.led_red = 5
         self.led_green = 6
         self.led_blue = 26
@@ -41,8 +41,7 @@ class Machine:
         GPIO.setup(self.ultrasonic_trig_pin4, GPIO.OUT)
         GPIO.setup(self.ultrasonic_echo_pin4, GPIO.IN)
     
-        GPIO.setup(self.push_button, GPIO.IN)
-        # , pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.push_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.led_red1, GPIO.OUT)
         GPIO.setup(self.led_green1, GPIO.OUT)
         GPIO.setup(self.led_blue1, GPIO.OUT)

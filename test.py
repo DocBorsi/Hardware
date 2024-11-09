@@ -4,7 +4,30 @@ import time
 
 machine = Machine (port='/dev/ttyACM0')
 
-# print("Calling get_distance_small()")
+# while True:
+#     value = machine.get_button_state()
+#     print(value)
+# machine.open_servo_1()
+# machine.open_servo_3()
+# time.sleep(10)
+
+machine.turn_on_red1()
+machine.turn_on_red()
+time.sleep(5)
+machine.turn_on_green1()
+machine.turn_on_green()
+time.sleep(5)
+machine.turn_on_blue1()
+machine.turn_on_blue()
+time.sleep(5)
+machine.turn_off_red1()
+machine.turn_off_green1()
+machine.turn_off_blue1()
+machine.turn_off_red()
+machine.turn_off_green()
+machine.turn_off_blue()
+
+# # print("Calling get_distance_small()")
 # s = machine.get_distance_small()
 # print(s)
 # m = machine.get_distance_medium()
@@ -13,6 +36,10 @@ machine = Machine (port='/dev/ttyACM0')
 # print(l)
 # t = machine.get_distance_tube()
 # print(t)
+# value= machine.get_irbreakbeam_state()
+# print(value)
+# time.sleep(5)
+# machine.open_servo_3()
 # machine.turn_on_blue()
 
 # def get_size():
@@ -116,12 +143,12 @@ machine = Machine (port='/dev/ttyACM0')
 #             # You can add a small sleep to avoid excessive CPU usage
 #             time.sleep(0.1)  # Adjust this delay as needed
 
-time.sleep(5)
-while True:
-    value = machine.get_button_state()
+# time.sleep(5)
+# while True:
+#     value = machine.get_button_state()
 
-    if value is True:
-        machine.open_servo_1()
+    # if value is True:
+    #     machine.open_servo_1()
 
 #params = {
 #    "category": "plastic",

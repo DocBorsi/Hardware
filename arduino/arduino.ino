@@ -9,6 +9,7 @@ Servo servo2;
 Servo servo3;
 Servo servo4;
 Servo servo5;
+Servo servohopper;
 
 HX711 scale;
 const int dataPin = 13;
@@ -25,11 +26,13 @@ void setup() {
   servo3.attach(4);
   servo4.attach(3);
   servo5.attach(2);
+  servohopper.attach(9);
   servo1.write(170);
   servo2.write(90);
   servo3.write(5);
   servo4.write(1);
   servo5.write(100);
+  servohopper.write(0);
 
   scale.begin(dataPin, clockPin);
   scale.set_scale(2950.f);
@@ -47,7 +50,7 @@ void loop() {
   else if (current_command == 0) { 
     closeServo1();
     lcd.clear();
-    lcd.setCursor(0, 0);  
+    lcd.setCursor(3, 0);  
     lcd.print("BOTECANnected");
     current_command = -1; 
   } 
@@ -55,7 +58,9 @@ void loop() {
   else if (current_command == 1) { 
     openServo1();
     lcd.clear();
-    lcd.setCursor(0, 0);
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
+    lcd.setCursor(0, 1);
     lcd.print("Insert Item");
     current_command = -1; 
   } 
@@ -63,7 +68,9 @@ void loop() {
   else if (current_command == 2) { 
     closeServo1();
     lcd.clear();
-    lcd.setCursor(0, 0);
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
+    lcd.setCursor(0, 1);
     lcd.print("Item Detected");
     current_command = -1; 
   } 
@@ -72,9 +79,11 @@ void loop() {
     openServo2();
     openServo4();
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Light Can Detected");
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
     lcd.setCursor(0, 1);
+    lcd.print("Light Can");
+    lcd.setCursor(0, 2);
     lcd.print("Accepted");
     current_command = -1; 
   }
@@ -83,9 +92,11 @@ void loop() {
     openServo2();
     openServo3();
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Heavy Can Detected");
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
     lcd.setCursor(0, 1);
+    lcd.print("Heavy Can");
+    lcd.setCursor(0, 2);
     lcd.print("Rejected");
     current_command = -1; 
   } 
@@ -99,9 +110,11 @@ void loop() {
     openServo2();
     openServo3();
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Unknown Heavy Object");
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
     lcd.setCursor(0, 1);
+    lcd.print("Unknown Heavy Object");
+    lcd.setCursor(0, 2);
     lcd.print("Rejected");
     current_command = -1; 
   }
@@ -111,9 +124,11 @@ void loop() {
     delay(1500);
     openServo4();
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Plastic Bottle Detected");
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
     lcd.setCursor(0, 1);
+    lcd.print("Plastic-Bottle");
+    lcd.setCursor(0, 2);
     lcd.print("Accepted");
     current_command = -1; 
   } 
@@ -121,9 +136,11 @@ void loop() {
   else if (current_command == 8) { 
     openServo3();
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Non-Bottle Object");
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
     lcd.setCursor(0, 1);
+    lcd.print("Non-Bottle Object");
+    lcd.setCursor(0, 2);
     lcd.print("Rejected");
     current_command = -1; 
   }
@@ -162,6 +179,13 @@ void loop() {
     current_command = -1; 
   }
 
+  else if (current_command == 15){
+    dispense();
+    delay(500);
+    notdispense();
+    current_command = -1;
+  }
+
   delay(500); 
 }
 
@@ -195,6 +219,14 @@ void closeServo4() {
 
 void closeServo5() {
   servo5.write(100);
+}
+
+void dispense(){
+  servohopper.write(90);
+}
+
+void notdispense(){
+  servohopper.write(0);
 }
 
 void openServo1() {

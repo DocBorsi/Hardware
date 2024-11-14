@@ -179,7 +179,7 @@ void loop() {
     current_command = -1; 
   }
 
-  else if (current_command == 15){
+  else if (current_command == 15) {
     dispense();
     delay(500);
     notdispense();
@@ -222,7 +222,7 @@ void closeServo5() {
 }
 
 void dispense(){
-  servohopper.write(90);
+  servohopper.write(85);
 }
 
 void notdispense(){

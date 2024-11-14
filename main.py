@@ -143,7 +143,7 @@ while True:
                     machine.turn_off_green()
                     machine.turn_off_blue()
                     # Add closing
-                    time.sleep(5)
+                    time.sleep(4)
                     machine.close_servo_2_4()
                     category = "can"
                     point = get_points(category, size)
@@ -163,7 +163,7 @@ while True:
                 machine.turn_off_green()
                 machine.turn_off_blue()
                 # Add closing
-                time.sleep(5)
+                time.sleep(3)
                 machine.close_servo_2_3()
                 servo_opened = False
                 time.sleep(3)
@@ -195,7 +195,7 @@ while True:
                     print('Weight passed, accept...')
                     machine.open_servo_2() # Accept
                     # Add closing
-                    time.sleep(5)
+                    time.sleep(3)
                     machine.close_servo2()
                     print('Getting Size')
                     size = get_size()

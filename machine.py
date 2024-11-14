@@ -359,6 +359,7 @@ class Machine:
     #         return True
     #     else:
     #         return False
+
     def print(self, msg):
         '''
         Print to thermal printer
@@ -370,3 +371,11 @@ class Machine:
         Cut thermal paper
         '''
         self.printer.cut()
+
+    def dispense_coins(self, amount: int):
+        '''
+        Dispense x amount coins
+        '''
+        for i in range(amount):
+            self.send_command(15)
+            time.sleep(0.7)

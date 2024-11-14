@@ -27,7 +27,16 @@ def create_ticket(points):
     response = requests.get(f"http://127.0.0.1:8000/point/create/?", params=params)
     ticket_data = response.json()
     return ticket_data
- 
+
+def check_for_unredeemed_coins() -> dict:
+    response = requests.get("http://127.0.0.1:8000/unredeemed_payout/")
+    payout = response.json()
+    return payout["payout"]
+
+def complete_unredeemed_payout(id: int):
+    response = requests.get(f"http://127.0.0.1:8000/complete_unredeemed_payout/?id={id}")
+    print(response.json())
+
 def get_size():
     if machine.get_distance_small() < 9:
         if machine.get_distance_medium() < 9:
@@ -48,6 +57,17 @@ last_debounce = time.time() - 3
  
 while True:
     current = time.time()
+
+    if not started:
+        payout = check_for_unredeemed_coins()
+        if payout:
+            id = payout.get('id')
+            amount = payout.get('amount')
+            # Show payout message in LCD
+            machine.dispense_coins(amount)
+            complete_unredeemed_payout(id)
+
+
     if not started and (current - last_debounce) > 3:
         button_pressed = machine.get_button_state()
         if button_pressed:

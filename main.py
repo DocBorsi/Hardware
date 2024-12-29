@@ -52,9 +52,12 @@ size = ""
 started = False
 finished = False
 servo_opened = False
- 
+
+
 last_debounce = time.time() - 3
- 
+machine.close_servo_1()
+time.sleep(3)
+
 while True:
     current = time.time()
 
@@ -163,7 +166,7 @@ while True:
                     machine.turn_off_green()
                     machine.turn_off_blue()
                     # Add closing
-                    time.sleep(4)
+                    time.sleep(3)
                     machine.close_servo_2_4()
                     category = "can"
                     point = get_points(category, size)

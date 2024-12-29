@@ -4,11 +4,13 @@ import time
 
 machine = Machine (port='/dev/ttyACM0')
 
-# while True:
-#     value = machine.get_button_state()
-#     print(value)
-machine.open_servo_1()
-machine.open_servo_3()
+while True:
+    value = machine.get_button_state()
+    print(value)
+
+# machine.dispense_coin (2)
+# machine.open_servo_1()
+# machine.open_servo_3()
 # time.sleep(10)
 
 # machine.turn_on_red1()
@@ -27,16 +29,14 @@ machine.open_servo_3()
 # machine.turn_off_green()
 # machine.turn_off_blue()
 
-# # print("Calling get_distance_small()")
+# # # print("Calling get_distance_small()")
 # s = machine.get_distance_small()
 # print(s)
-# m = machine.get_distance_medium()
-# print(m)
 # l = machine.get_distance_large()
 # print(l)
 # t = machine.get_distance_tube()
 # print(t)
-# value= machine.get_irbreakbeam_state()
+# # value= machine.get_irbreakbeam_state()
 # print(value)
 # time.sleep(5)
 # machine.open_servo_3()

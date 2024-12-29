@@ -6,9 +6,9 @@ import time
 class Machine:
     def __init__(self, port) -> None:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
-        # self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
+        self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
         self.arduino.flush()
-        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
         self.ultrasonic_trig_pin1 = 23  
         self.ultrasonic_echo_pin1 = 24
@@ -18,6 +18,10 @@ class Machine:
         self.ultrasonic_echo_pin3 = 16
         self.ultrasonic_trig_pin4 = 20
         self.ultrasonic_echo_pin4 = 21
+        self.ultrasonic_trig_pin_bin1 = 2
+        self.ultrasonic_echo_pin_bin1 = 3
+        self.ultrasonic_trig_pin_bin2 = 14
+        self.ultrasonic_echo_pin_bin2 = 15
 
         self.push_button = 22
         self.led_red1 = 13
@@ -40,6 +44,11 @@ class Machine:
         GPIO.setup(self.ultrasonic_echo_pin3, GPIO.IN)
         GPIO.setup(self.ultrasonic_trig_pin4, GPIO.OUT)
         GPIO.setup(self.ultrasonic_echo_pin4, GPIO.IN)
+        GPIO.setup(self.ultrasonic_trig_pin_bin1, GPIO.OUT)
+        GPIO.setup(self.ultrasonic_echo_pin_bin1, GPIO.IN)
+        GPIO.setup(self.ultrasonic_trig_pin_bin2, GPIO.OUT)
+        GPIO.setup(self.ultrasonic_echo_pin_bin2, GPIO.IN)
+
     
         GPIO.setup(self.push_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.led_red1, GPIO.OUT)
@@ -179,6 +188,10 @@ class Machine:
         '''
         self.send_command(14)
 
+    def dispense_coin (self, amount:int):
+        for i in range(amount):
+            self.send_command(15)
+
     def get_distance_tube(self):
         '''
         Get distance from ultrasonic sensor
@@ -251,6 +264,42 @@ class Machine:
         distance = round(distance, 2)
         return distance
         
+    def get_distance_bin1(self):
+        '''
+        Get distance from ultrasonic sensor
+        '''
+        GPIO.output(self.ultrasonic_trig_pin_bin1, True)
+        time.sleep(0.00001)
+        GPIO.output(self.ultrasonic_trig_pin_bin1, False)
+        pulse_start = time.time()
+        while GPIO.input(self.ultrasonic_echo_pin_bin1) == 0:
+            pulse_start = time.time()
+        pulse_end = time.time()
+        while GPIO.input(self.ultrasonic_echo_pin_bin1) == 1:
+            pulse_end = time.time()
+        pulse_duration = pulse_end - pulse_start
+        distance = pulse_duration * 17150
+        distance = round(distance, 2)
+        return distance
+    
+    def get_distance_bin2(self):
+        '''
+        Get distance from ultrasonic sensor
+        '''
+        GPIO.output(self.ultrasonic_trig_pin_bin2, True)
+        time.sleep(0.00001)
+        GPIO.output(self.ultrasonic_trig_pin_bin2, False)
+        pulse_start = time.time()
+        while GPIO.input(self.ultrasonic_echo_pin_bin2) == 0:
+            pulse_start = time.time()
+        pulse_end = time.time()
+        while GPIO.input(self.ultrasonic_echo_pin_bin2) == 1:
+            pulse_end = time.time()
+        pulse_duration = pulse_end - pulse_start
+        distance = pulse_duration * 17150
+        distance = round(distance, 2)
+        return distance
+
     def get_irbreakbeam_state(self):
         '''
         Get irbreak beam state from laser sensor
@@ -346,10 +395,11 @@ class Machine:
         '''
         Get button state
         '''
-        if GPIO.input(self.push_button) == GPIO.HIGH:
+        if GPIO.input(self.push_button) == GPIO.LOW:
             return True
         else:
             return False
+        
     
     # def get_button_state_off(self):
     #     '''

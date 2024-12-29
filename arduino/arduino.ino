@@ -25,7 +25,7 @@ void setup() {
   servo2.attach(10);
   servo3.attach(4);
   servo4.attach(3);
-  servo5.attach(2);
+  servo5.attach(5);
   servohopper.attach(9);
   servo1.write(170);
   servo2.write(90);
@@ -35,7 +35,7 @@ void setup() {
   servohopper.write(0);
 
   scale.begin(dataPin, clockPin);
-  scale.set_scale(2950.f);
+  scale.set_scale(2955.f);
   scale.tare();
   
   lcd.init();
@@ -186,7 +186,7 @@ void loop() {
     current_command = -1;
   }
 
-  delay(500); 
+  delay(100); 
 }
 
 void receiveCommand() {

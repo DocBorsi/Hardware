@@ -1,14 +1,21 @@
-import time
-import Adafruit_CharLCD as LCD
+from signal import signal, SIGTERM, SIGHUP, pause
+from rpi_lcd import LCD
 
-lcd = LCD.Adafruit_CharLCDPlate()
+lcd = LCD()
 
-lcd.clear()
-lcd.set_backlight(1)
-lcd.message('Hello, World!')
-time.sleep(2)
-lcd.clear()
-lcd.message('Raspberry Pi')
-time.sleep(2)
-lcd.clear()
+def safe_exit(signum, frame):
+    exit(1)
 
+try:
+    signal(SIGTERM, safe_exit)
+    signal(SIGHUP, safe_exit)
+
+    lcd.text("Hello,", 1)
+    lcd.text("Raspberry Pi!", 2)
+
+    pause()
+
+except KeyboardInterrupt:
+    pass
+finally:
+    lcd.clear()

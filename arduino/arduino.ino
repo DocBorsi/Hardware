@@ -36,7 +36,7 @@ void setup() {
   servohopper.write(0);
 
   scale.begin(dataPin, clockPin);
-  scale.set_scale(2956.f);
+  scale.set_scale(2955.f);
   scale.tare();
   
   lcd.init();

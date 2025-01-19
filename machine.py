@@ -2,15 +2,16 @@ import RPi.GPIO as GPIO
 from escpos import *
 import serial
 import time
-from signal import signal, SIGTERM, SIGHUP, pause
+from signal import signal, SIGTERM, SIGHUP
 from rpi_lcd import LCD
 
 class Machine:
     def __init__(self, port) -> None:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
         self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
+        self.lcd = LCD()
         self.arduino.flush()
-        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
         self.ultrasonic_trig_pin1 = 23  
         self.ultrasonic_echo_pin1 = 24
@@ -61,7 +62,39 @@ class Machine:
         GPIO.setup(self.led_blue, GPIO.OUT)
         GPIO.setup(self.IR_SENSOR_PIN, GPIO.IN)
         GPIO.setup(self.inductive_sensor_pin, GPIO.IN)
+
+        signal(SIGTERM, self.safe_exit)
+        signal(SIGHUP, self.safe_exit)
         
+    def safe_exit(self, signum, frame):
+        self.lcd.clear()
+        GPIO.cleanup()
+        exit(1)
+
+    def update_lcd_line(self, text: str, line: int):
+        """
+        Update a specific line on the LCD display.
+
+        Parameters:
+        text (str): The text to display.
+        line (int): The line number (1 or 2).
+        """
+        if line in [1, 2]:
+            self.lcd.text(text, line)
+        else:
+            raise ValueError("LCD only supports line 1 and 2.")
+
+    def clear_lcd(self):
+        """Clear the LCD display."""
+        self.lcd.clear()
+
+    # Add other methods (e.g., for interacting with Arduino, printer, GPIOs) here.
+
+    def close(self):
+        """Clean up resources when exiting."""
+        self.lcd.clear()
+        GPIO.cleanup()
+
 
     def send_command(self, command: int):
         '''
@@ -425,19 +458,4 @@ class Machine:
             self.send_command(15)
             time.sleep(0.7)
     
-    def safe_exit(signum, frame):
-        exit(1)
-        lcd = LCD()    
-        try:
-            signal(SIGTERM, safe_exit)
-            signal(SIGHUP, safe_exit)
 
-            lcd.text("Hello,", 1)
-            lcd.text("Raspberry Pi!", 2)
-
-            pause()
-
-        except KeyboardInterrupt:
-            pass
-        finally:
-            lcd.clear()

@@ -4,20 +4,7 @@ import time
 
 machine = Machine (port='/dev/ttyACM0')
 
-# Example usage:
-if __name__ == "__main__":
-    try:
-        machine.update_lcd_line("Hello,", 1)
-        machine.update_lcd_line("Raspberry Pi!", 2)
-        time.sleep(5)
-        machine.update_lcd_line("Line 1 updated", 1)
-        machine.update_lcd_line("Line 2 updated", 2)
-        time.sleep(5)
-        machine.clear_lcd()
-    except KeyboardInterrupt:
-        machine.close()
-    finally:
-        machine.close()
+machine.safe_exit("BoteCannected", 1)
 
 # while True:
 #     value = machine.get_button_state()

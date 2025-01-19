@@ -16,6 +16,7 @@ HX711 scale;
 const int dataPin = 13;
 const int clockPin = 12;
 float w1, w2, previous = 0;
+const int sensor = 7;
 
 int current_command = -1;
 
@@ -38,6 +39,8 @@ void setup() {
   scale.begin(dataPin, clockPin);
   scale.set_scale(2955.f);
   scale.tare();
+
+  pinMode(sensor, INPUT);
   
   lcd.init();
   lcd.backlight();
@@ -201,78 +204,6 @@ void loop() {
     current_command == -1;
   }
 
-//  else if (current_command == 18){
-//    lcd.clear();
-//    lcd.setCursor(3, 0);  
-//    lcd.print("BOTECANnected");
-//    lcd.setCursor(0, 1);
-//    lcd.print("Insert Item");
-//    current_command == -1;
-//  }
-//
-//  else if (current_command == 19){
-//    lcd.clear();
-//    lcd.setCursor(3, 0);  
-//    lcd.print("BOTECANnected");
-//    lcd.setCursor(0, 1);
-//    lcd.print("Item Detected");
-//    current_command == -1;
-//  }
-//
-//  else if (current_command == 20){
-//    lcd.clear();
-//    lcd.setCursor(3, 0);  
-//    lcd.print("BOTECANnected");
-//    lcd.setCursor(0, 1);
-//    lcd.print("Light Can");
-//    lcd.setCursor(0, 2);
-//    lcd.print("Accepted");
-//    current_command == -1;
-//  }
-//
-//  else if (current_command == 21){
-//    lcd.clear();
-//    lcd.setCursor(3, 0);  
-//    lcd.print("BOTECANnected");
-//    lcd.setCursor(0, 1);
-//    lcd.print("Heavy Can");
-//    lcd.setCursor(0, 2);
-//    lcd.print("Rejected");
-//    current_command == -1;
-//  }
-//
-//  else if (current_command == 22){
-//    lcd.clear();
-//    lcd.setCursor(3, 0);  
-//    lcd.print("BOTECANnected");
-//    lcd.setCursor(0, 1);
-//    lcd.print("Unknown Heavy Object");
-//    lcd.setCursor(0, 2);
-//    lcd.print("Rejected");
-//    current_command == -1;
-//  }
-//
-//  else if (current_command == 23){
-//    lcd.clear();
-//    lcd.setCursor(3, 0);  
-//    lcd.print("BOTECANnected");
-//    lcd.setCursor(0, 1);
-//    lcd.print("Plastic-Bottle");
-//    lcd.setCursor(0, 2);
-//    lcd.print("Accepted");
-//    current_command == -1;
-//  } 
-//
-//  else if (current_command == 24){
-//    lcd.clear();
-//    lcd.setCursor(3, 0);  
-//    lcd.print("BOTECANnected");
-//    lcd.setCursor(0, 1);
-//    lcd.print("Non-Bottle Object");
-//    lcd.setCursor(0, 2);
-//    lcd.print("Rejected");
-//    current_command == -1;
-//  } 
 
   delay(100); 
 }
@@ -348,4 +279,11 @@ void getWeight(){
   }
   float gram = abs(w1);
   sendResponse(String(gram));
+}
+
+
+void insufficient(){
+  int irState = digitalRead(sensor);
+  irState == LOW;
+    
 }

@@ -21,10 +21,10 @@ class Machine:
         self.ultrasonic_echo_pin3 = 16
         self.ultrasonic_trig_pin4 = 20
         self.ultrasonic_echo_pin4 = 21
-        self.ultrasonic_trig_pin_bin1 = 9
-        self.ultrasonic_echo_pin_bin1 = 11
-        self.ultrasonic_trig_pin_bin2 = 14
-        self.ultrasonic_echo_pin_bin2 = 15
+        self.ultrasonic_trig_pin_bin2 = 9
+        self.ultrasonic_echo_pin_bin2 = 11
+        self.ultrasonic_trig_pin_bin1 = 14
+        self.ultrasonic_echo_pin_bin1 = 15
 
         self.push_button = 22
         self.led_red1 = 13

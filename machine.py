@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 from escpos import *
 import serial
 import time
+from signal import signal, SIGTERM, SIGHUP, pause
+from rpi_lcd import LCD
 
 class Machine:
     def __init__(self, port) -> None:
@@ -402,16 +404,6 @@ class Machine:
             return True
         else:
             return False
-        
-    
-    # def get_button_state_off(self):
-    #     '''
-    #     Get button state
-    #     '''
-    #     if GPIO.input(self.push_button) == GPIO.LOW:
-    #         return True
-    #     else:
-    #         return False
 
     def print(self, msg):
         '''
@@ -432,3 +424,20 @@ class Machine:
         for i in range(amount):
             self.send_command(15)
             time.sleep(0.7)
+    
+    def safe_exit(signum, frame):
+        exit(1)
+        lcd = LCD()    
+        try:
+            signal(SIGTERM, safe_exit)
+            signal(SIGHUP, safe_exit)
+
+            lcd.text("Hello,", 1)
+            lcd.text("Raspberry Pi!", 2)
+
+            pause()
+
+        except KeyboardInterrupt:
+            pass
+        finally:
+            lcd.clear()

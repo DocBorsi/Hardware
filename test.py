@@ -5,6 +5,9 @@ import time
 machine = Machine (port='/dev/ttyACM0')
 
 
+machine.safe_exit()
+
+
 # while True:
 #     value = machine.get_button_state()
 #     print(value)

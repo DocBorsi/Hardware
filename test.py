@@ -4,11 +4,11 @@ import time
 
 machine = Machine (port='/dev/ttyACM0')
 
-machine.safe_exit("BoteCannected", 1)
+#machine.safe_exit("BoteCannected", 1)
 
-# while True:
-#     value = machine.get_button_state()
-#     print(value)
+#while True:
+     #value = machine.get_button_state()
+     #print(value)
 
 # machine.dispense_coin (2)
 # machine.open_servo_1()
@@ -36,8 +36,8 @@ machine.safe_exit("BoteCannected", 1)
 # print(bin1)
 # bin2 = machine.get_distance_bin2()
 # print(bin2)
-# t = machine.get_distance_tube()
-# print(t)
+t = machine.get_distance_small()
+print(t)
 # # value= machine.get_irbreakbeam_state()
 # print(value)
 # time.sleep(5)

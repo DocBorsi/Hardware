@@ -1,7 +1,11 @@
 from machine import Machine
 import requests
 import time
- 
+
+from huawei_lte_api.Connection import Connection
+from huawei_lte_api.Client import Client
+from huawei_lte_api.enums.client import ResponseEnum
+
  
 machine = Machine(port='/dev/ttyACM0')
  
@@ -45,7 +49,16 @@ def get_size():
             return "medium"
         return "small"
     return None
- 
+
+def send_sms(phone_number, message):
+    url = 'http://user:botecannected2024@192.168.254.254/'
+    with Connection(url) as connection:
+        client = Client(connection)
+        if client.sms.send_sms([phone_number], message) == ResponseEnum.OK.value:
+            print('SMS was send successfully')
+        else:
+            print('Error sending sms')
+
 total_points = 0
 category = ""
 size = ""
@@ -74,6 +87,21 @@ while True:
     if not started and (current - last_debounce) > 3:
         button_pressed = machine.get_button_state()
         if button_pressed:
+            can_full_distance = machine.get_distance_bin1()
+            plastic_full_distance = machine.get_distance_bin2()
+
+            if can_full_distance < 20:
+                print('Can bin is full')
+                send_sms('09123456789', 'Can bin is full')
+                # lcd print 
+                continue
+
+            if plastic_full_distance < 20:
+                print('Plastic bin is full')
+                send_sms('09123456789', 'Plastic bin is full')
+                # lcd print 
+                continue
+
             started = True
             print('started')
             last_debounce = time.time()

@@ -8,7 +8,7 @@ class Machine:
         self.arduino = serial.Serial(port, 9600, timeout = 1)
         self.printer = printer.Usb(idVendor=0x0416, idProduct=0x5011, interface=0, in_ep=0x81, out_ep=0x03)
         self.arduino.flush()
-        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        self.available_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
         self.ultrasonic_trig_pin1 = 23  
         self.ultrasonic_echo_pin1 = 24
@@ -18,8 +18,8 @@ class Machine:
         self.ultrasonic_echo_pin3 = 16
         self.ultrasonic_trig_pin4 = 20
         self.ultrasonic_echo_pin4 = 21
-        self.ultrasonic_trig_pin_bin1 = 2
-        self.ultrasonic_echo_pin_bin1 = 3
+        self.ultrasonic_trig_pin_bin1 = 9
+        self.ultrasonic_echo_pin_bin1 = 11
         self.ultrasonic_trig_pin_bin2 = 14
         self.ultrasonic_echo_pin_bin2 = 15
 
@@ -191,6 +191,9 @@ class Machine:
     def dispense_coin (self, amount:int):
         for i in range(amount):
             self.send_command(15)
+    
+    def bin_is_full(self):
+        self.send_command(16)
 
     def get_distance_tube(self):
         '''

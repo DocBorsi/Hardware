@@ -4,6 +4,7 @@
 #include <Wire.h>
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
+
 Servo servo1;
 Servo servo2;
 Servo servo3;
@@ -23,19 +24,19 @@ void setup() {
 
   servo1.attach(11);
   servo2.attach(10);
-  servo3.attach(4);
-  servo4.attach(3);
-  servo5.attach(5);
+  servo3.attach(5);
+  servo4.attach(4);
+  servo5.attach(3);
   servohopper.attach(9);
   servo1.write(170);
   servo2.write(90);
-  servo3.write(5);
+  servo3.write(0);
   servo4.write(1);
   servo5.write(100);
   servohopper.write(0);
 
   scale.begin(dataPin, clockPin);
-  scale.set_scale(2955.f);
+  scale.set_scale(2956.f);
   scale.tare();
   
   lcd.init();
@@ -186,6 +187,93 @@ void loop() {
     current_command = -1;
   }
 
+  else if (current_command == 16){
+    lcd.clear();
+    lcd.setCursor(3,0);
+    lcd.print("Bin is Full");
+    current_command == -1;
+  }
+
+  else if (current_command == 17){
+    lcd.clear();
+    lcd.setCursor(3, 0);  
+    lcd.print("BOTECANnected");
+    current_command == -1;
+  }
+
+//  else if (current_command == 18){
+//    lcd.clear();
+//    lcd.setCursor(3, 0);  
+//    lcd.print("BOTECANnected");
+//    lcd.setCursor(0, 1);
+//    lcd.print("Insert Item");
+//    current_command == -1;
+//  }
+//
+//  else if (current_command == 19){
+//    lcd.clear();
+//    lcd.setCursor(3, 0);  
+//    lcd.print("BOTECANnected");
+//    lcd.setCursor(0, 1);
+//    lcd.print("Item Detected");
+//    current_command == -1;
+//  }
+//
+//  else if (current_command == 20){
+//    lcd.clear();
+//    lcd.setCursor(3, 0);  
+//    lcd.print("BOTECANnected");
+//    lcd.setCursor(0, 1);
+//    lcd.print("Light Can");
+//    lcd.setCursor(0, 2);
+//    lcd.print("Accepted");
+//    current_command == -1;
+//  }
+//
+//  else if (current_command == 21){
+//    lcd.clear();
+//    lcd.setCursor(3, 0);  
+//    lcd.print("BOTECANnected");
+//    lcd.setCursor(0, 1);
+//    lcd.print("Heavy Can");
+//    lcd.setCursor(0, 2);
+//    lcd.print("Rejected");
+//    current_command == -1;
+//  }
+//
+//  else if (current_command == 22){
+//    lcd.clear();
+//    lcd.setCursor(3, 0);  
+//    lcd.print("BOTECANnected");
+//    lcd.setCursor(0, 1);
+//    lcd.print("Unknown Heavy Object");
+//    lcd.setCursor(0, 2);
+//    lcd.print("Rejected");
+//    current_command == -1;
+//  }
+//
+//  else if (current_command == 23){
+//    lcd.clear();
+//    lcd.setCursor(3, 0);  
+//    lcd.print("BOTECANnected");
+//    lcd.setCursor(0, 1);
+//    lcd.print("Plastic-Bottle");
+//    lcd.setCursor(0, 2);
+//    lcd.print("Accepted");
+//    current_command == -1;
+//  } 
+//
+//  else if (current_command == 24){
+//    lcd.clear();
+//    lcd.setCursor(3, 0);  
+//    lcd.print("BOTECANnected");
+//    lcd.setCursor(0, 1);
+//    lcd.print("Non-Bottle Object");
+//    lcd.setCursor(0, 2);
+//    lcd.print("Rejected");
+//    current_command == -1;
+//  } 
+
   delay(100); 
 }
 
@@ -210,7 +298,7 @@ void closeServo2() {
 }
 
 void closeServo3() {
-  servo3.write(5);
+  servo3.write(0);
 }
 
 void closeServo4() {

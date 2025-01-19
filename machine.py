@@ -31,7 +31,7 @@ class Machine:
         self.led_red = 5
         self.led_green = 6
         self.led_blue = 26
-        self.inductive_sensor_pin = 17
+        self.inductive_sensor_pin = 4
         self.IR_SENSOR_PIN = 27
     
         #GPIO.setmode()

@@ -8,7 +8,7 @@ import serial
 GPIO.setmode(GPIO.BCM)
 
 # Define the GPIO pins
-SENSOR_PIN = 17
+SENSOR_PIN = 4
 # LED_PIN = 27  # Choose a GPIO pin for the LED
 
 # Set up the GPIO pins

@@ -1,8 +1,9 @@
 import RPi.GPIO as GPIO
-from escpos import *
 import serial
 import time
 
+from escpos import *
+from rpi_lcd import LCD
 
 class Machine:
     def __init__(self, port) -> None:
@@ -60,6 +61,9 @@ class Machine:
         GPIO.setup(self.led_blue, GPIO.OUT)
         GPIO.setup(self.IR_SENSOR_PIN, GPIO.IN)
         GPIO.setup(self.inductive_sensor_pin, GPIO.IN)
+
+        self.lcd = LCD()
+        self.lcd.clear()
         
 
     def send_command(self, command: int):
@@ -98,30 +102,46 @@ class Machine:
         Close servo 1
         '''
         self.send_command(0)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
 
     def open_servo_1(self):
         '''
         Open servo 1
         '''
         self.send_command(1)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Insert Item', 1)
 
     def close_servo1(self):
         '''
         Close servo 1
         '''
         self.send_command(2)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Item detected', 1)
 
     def open_servo_2_4(self):
         '''
         Open servo 2 and 4
         '''
         self.send_command(3)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Light Can', 1)
+        self.lcd.text('Accepted', 2)
 
     def open_servo_2_3heavy(self):
         '''
         Open servo 2 and 3
         '''
         self.send_command(4)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Heavy Can', 1)
+        self.lcd.text('Rejected', 2)
 
     def open_servo_2(self):
         '''
@@ -134,18 +154,30 @@ class Machine:
         Open servo 2
         '''
         self.send_command(6)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Unknown heavy object', 1)
+        self.lcd.text('Rejected', 2)
 
     def open_servo_4_5(self):
         '''
         Open servo 2
         '''
         self.send_command(7)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Plastic-Bottle', 1)
+        self.lcd.text('Accepted', 2)
 
     def open_servo_3(self):
         '''
         Open servo 2
         '''
         self.send_command(8)
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Non-plastic object', 1)
+        self.lcd.text('Rejected', 2)
 
     def get_weight(self):
         '''
@@ -193,6 +225,16 @@ class Machine:
         for i in range(amount):
             self.send_command(15)
     
+    def bin_full(self):
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Bin is Full', 1)
+
+    def insufficient(self):
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Insufficient Coins', 1)
+        self.send_command(16)
     
 
     def get_distance_tube(self):
@@ -422,5 +464,3 @@ class Machine:
         for i in range(amount):
             self.send_command(15)
             time.sleep(0.7)
-    
-    

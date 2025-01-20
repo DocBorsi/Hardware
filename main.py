@@ -6,9 +6,8 @@ from huawei_lte_api.Connection import Connection
 from huawei_lte_api.Client import Client
 from huawei_lte_api.enums.client import ResponseEnum
 
- 
 machine = Machine(port='/dev/ttyACM0')
- 
+
 def get_points(category, size):
     point_map = {
         "can": 5,
@@ -23,7 +22,7 @@ def get_points(category, size):
     else:
         points = 0
     return points
- 
+
 def create_ticket(points):
     params = {
         "points": points
@@ -55,19 +54,36 @@ def send_sms(phone_number, message):
     with Connection(url) as connection:
         client = Client(connection)
         if client.sms.send_sms([phone_number], message) == ResponseEnum.OK.value:
-            print('SMS was send successfully')
+            print('SMS was sent successfully')
         else:
-            print('Error sending sms')
+            print('Error sending SMS')
+
+def print_ticket(data, items, total_bottles, total_cans, total_points):
+    machine.print("***********************")
+    machine.print(f"\nNew ticket: {data.get('code')} - {data.get('point')}")
+    machine.print("\n***********************")
+    machine.print("\nItem Details:")
+    for item in items:
+        machine.print(f"\nType: {item['type']}, {item['size']}, {item['points']}")
+    machine.print("\n************************")
+    machine.print(f"\nTotal Bottles: {total_bottles}")
+    machine.print(f"\nTotal Cans: {total_cans}")
+    machine.print(f"\nTotal Points: {total_points}")
+    machine.print("\n********************************")
+    machine.cut_paper()
 
 total_points = 0
+total_bottles = 0
+total_cans = 0
 category = ""
 size = ""
 started = False
 finished = False
 servo_opened = False
-
+items = []  # List to store details of all items inserted
 
 last_debounce = time.time() - 3
+last_sms = time.time()
 machine.close_servo_1()
 time.sleep(3)
 
@@ -75,14 +91,21 @@ while True:
     current = time.time()
 
     if not started:
+        # if no coins, send sms
+        if not machine.detect_coins():
+            if time.time() - last_sms < 3600:
+                print('Last SMS cooldown not passed')
+                continue
+            send_sms('09123456789', 'No coins available')
+            last_sms = time.time()
+            continue
+
         payout = check_for_unredeemed_coins()
         if payout:
             id = payout.get('id')
             amount = payout.get('amount')
-            # Show payout message in LCD
             machine.dispense_coins(amount)
             complete_unredeemed_payout(id)
-
 
     if not started and (current - last_debounce) > 3:
         button_pressed = machine.get_button_state()
@@ -93,20 +116,22 @@ while True:
             if can_full_distance < 20:
                 print('Can bin is full')
                 send_sms('09123456789', 'Can bin is full')
-                # lcd print 
+                machine.lcd.clear()
+                machine.lcd.text('Can bin is full', 1)
                 continue
 
             if plastic_full_distance < 20:
                 print('Plastic bin is full')
                 send_sms('09123456789', 'Plastic bin is full')
-                # lcd print 
+                machine.lcd.clear()
+                machine.lcd.text('Plastic bin is full', 1)
                 continue
 
             started = True
             print('started')
             last_debounce = time.time()
             continue
- 
+
     if finished:
         machine.close_servo_1()
         if total_points == 0:
@@ -115,20 +140,21 @@ while True:
             started = False
             servo_opened = False
             continue
-        
+
         data = create_ticket(total_points)
-        print(f"New ticket: {data.get('code')} - {data.get('point')}")
-        machine.print("********************************")
-        machine.print(f"New ticket: {data.get('code')} - {data.get('point')}")
-        machine.print("********************************")
-        machine.cut_paper()
+        print_ticket(data, items, total_bottles, total_cans, total_points)
+
+        # Reset for the next session
         category = ""
         size = ""
         total_points = 0
+        total_bottles = 0
+        total_cans = 0
+        items = []
         finished = False
         started = False
         servo_opened = False
- 
+
     if started:
         if (current - last_debounce) > 3:
             button_pressed = machine.get_button_state()
@@ -143,26 +169,24 @@ while True:
                 machine.turn_off_blue()
                 finished = True
                 continue
- 
+
         if not servo_opened:
             machine.open_servo_1()
             machine.turn_on_blue1()
             machine.turn_on_blue()
             print('Servo 1 opened')
             servo_opened = True
- 
-        # Waiting for distance to be less than 20
+
         time.sleep(2)
         distance = machine.get_distance_tube()
-        print (f'Distance:{distance}')
+        print(f'Distance:{distance}')
         if distance < 9:
-            print (f'Distance:{distance}')
+            print(f'Distance:{distance}')
             machine.close_servo1()
             print('Servo 1 closed')
             is_inductive = machine.get_inductive_state()
             print(f'Inductive state: {is_inductive}')
- 
-            # If inductive (can, metal, etc)
+
             if is_inductive:
                 weight = 0
                 retry = 10
@@ -176,35 +200,35 @@ while True:
                 else:
                     print('Error getting weight!')
                     machine.open_servo_2_3heavy()
-                    # Add closing
                     time.sleep(5)
                     machine.close_servo_2_3()
                     servo_opened = False
                     time.sleep(3)
                     continue
                 print(f'Weight: {weight}')
- 
+
                 if weight >= 1.00 and weight <= 25.0:
                     print('Weight passed, accept...')
-                    machine.open_servo_2_4() # Accept
+                    machine.open_servo_2_4()
                     machine.turn_off_red1()
                     machine.turn_on_green1()
                     machine.turn_off_blue1()
                     machine.turn_off_red()
                     machine.turn_off_green()
                     machine.turn_off_blue()
-                    # Add closing
                     time.sleep(3)
                     machine.close_servo_2_4()
                     category = "can"
                     point = get_points(category, size)
                     total_points += point
+                    total_cans += 1
+                    items.append({"type": category, "size": size, "points": point})
                     category = ''
                     size = ''
                     servo_opened = False
                     time.sleep(3)
                     continue
- 
+
                 print('Weight did not pass, rejecting...')
                 machine.open_servo_2_3heavy()
                 machine.turn_on_red1()
@@ -213,14 +237,12 @@ while True:
                 machine.turn_off_red()
                 machine.turn_off_green()
                 machine.turn_off_blue()
-                # Add closing
                 time.sleep(3)
                 machine.close_servo_2_3()
                 servo_opened = False
                 time.sleep(3)
                 continue
- 
-            # If not inductive (e.g. plastics)
+
             if not is_inductive:
                 weight = 0
                 retry = 10
@@ -230,22 +252,19 @@ while True:
                     if weight is not None:
                         break
                     retry -= 1
- 
                 else:
                     print('Error getting weight!')
                     machine.open_servo_2_3heavy()
-                    # Add closing#
                     time.sleep(5)
                     machine.close_servo_2_3()
                     servo_opened = False
                     time.sleep(3)
-                    continue 
+                    continue
                 print(f'Weight: {weight}')
- 
+
                 if weight >= 1.00 and weight <= 25.0:
                     print('Weight passed, accept...')
-                    machine.open_servo_2() # Accept
-                    # Add closing
+                    machine.open_servo_2()
                     time.sleep(3)
                     machine.close_servo2()
                     print('Getting Size')
@@ -256,7 +275,7 @@ while True:
                         print('Size did not pass')
                         servo_opened = False
                         continue
- 
+
                     is_opaque = machine.get_irbreakbeam_state()
                     print(f'Opaque: {is_opaque}')
                     if is_opaque:
@@ -273,12 +292,14 @@ while True:
                         category = "plastic"
                         point = get_points(category, size)
                         total_points += point
+                        total_bottles += 1
+                        items.append({"type": category, "size": size, "points": point})
                         category = ''
                         size = ''
                         servo_opened = False
                         time.sleep(3)
                         continue
- 
+
                     print(f'Opaque, rejecting...')
                     machine.open_servo_3()
                     machine.turn_off_red1()
@@ -292,7 +313,7 @@ while True:
                     servo_opened = False
                     time.sleep(3)
                     continue
- 
+
                 print('Weight did not pass, rejecting...')
                 machine.open_servo_2_3()
                 machine.turn_off_red1()
@@ -301,7 +322,6 @@ while True:
                 machine.turn_on_red()
                 machine.turn_off_green()
                 machine.turn_off_blue()
-                # Add closing
                 time.sleep(5)
                 machine.close_servo_2_3()
                 servo_opened = False

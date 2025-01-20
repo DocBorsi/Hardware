@@ -42,8 +42,8 @@ void setup() {
 
   pinMode(sensor, INPUT);
   
-  lcd.init();
-  lcd.backlight();
+  // lcd.init();
+  // lcd.backlight();
 }
 
 void loop() {
@@ -53,55 +53,55 @@ void loop() {
   
   else if (current_command == 0) { 
     closeServo1();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
     current_command = -1; 
   } 
   
   else if (current_command == 1) { 
     openServo1();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Insert Item");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Insert Item");
     current_command = -1; 
   } 
   
   else if (current_command == 2) { 
     closeServo1();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Item Detected");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Item Detected");
     current_command = -1; 
   } 
   
   else if (current_command == 3) { 
     openServo2();
     openServo4();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Light Can");
-    lcd.setCursor(0, 2);
-    lcd.print("Accepted");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Light Can");
+    // lcd.setCursor(0, 2);
+    // lcd.print("Accepted");
     current_command = -1; 
   }
   
   else if (current_command == 4) { 
     openServo2();
     openServo3();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Heavy Can");
-    lcd.setCursor(0, 2);
-    lcd.print("Rejected");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Heavy Can");
+    // lcd.setCursor(0, 2);
+    // lcd.print("Rejected");
     current_command = -1; 
   } 
   
@@ -113,13 +113,13 @@ void loop() {
   else if (current_command == 6) { 
     openServo2();
     openServo3();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Unknown Heavy Object");
-    lcd.setCursor(0, 2);
-    lcd.print("Rejected");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Unknown Heavy Object");
+    // lcd.setCursor(0, 2);
+    // lcd.print("Rejected");
     current_command = -1; 
   }
   
@@ -127,25 +127,25 @@ void loop() {
     openServo5();
     delay(1500);
     openServo4();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Plastic-Bottle");
-    lcd.setCursor(0, 2);
-    lcd.print("Accepted");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Plastic-Bottle");
+    // lcd.setCursor(0, 2);
+    // lcd.print("Accepted");
     current_command = -1; 
   } 
   
   else if (current_command == 8) { 
     openServo3();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Non-Bottle Object");
-    lcd.setCursor(0, 2);
-    lcd.print("Rejected");
+    // lcd.clear();
+    // lcd.setCursor(3, 0);  
+    // lcd.print("BOTECANnected");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Non-Bottle Object");
+    // lcd.setCursor(0, 2);
+    // lcd.print("Rejected");
     current_command = -1; 
   }
   
@@ -191,18 +191,18 @@ void loop() {
   }
 
   else if (current_command == 16){
-    lcd.clear();
-    lcd.setCursor(3,0);
-    lcd.print("Bin is Full");
+    // lcd.clear();
+    // lcd.setCursor(3,0);
+    // lcd.print("Bin is Full");
     current_command == -1;
   }
 
-  else if (current_command == 17){
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    current_command == -1;
-  }
+  // else if (current_command == 17){
+  //   lcd.clear();
+  //   lcd.setCursor(3, 0);  
+  //   lcd.print("BOTECANnected");
+  //   current_command == -1;
+  // }
 
 
   delay(100); 

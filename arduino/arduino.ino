@@ -1,9 +1,6 @@
 #include <Servo.h>
 #include <HX711.h>
-#include <LiquidCrystal_I2C.h>
 #include <Wire.h>
-
-LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 Servo servo1;
 Servo servo2;
@@ -41,9 +38,6 @@ void setup() {
   scale.tare();
 
   pinMode(sensor, INPUT);
-  
-  lcd.init();
-  lcd.backlight();
 }
 
 void loop() {
@@ -53,55 +47,28 @@ void loop() {
   
   else if (current_command == 0) { 
     closeServo1();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
     current_command = -1; 
   } 
   
   else if (current_command == 1) { 
     openServo1();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Insert Item");
     current_command = -1; 
   } 
   
   else if (current_command == 2) { 
     closeServo1();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Item Detected");
     current_command = -1; 
   } 
   
   else if (current_command == 3) { 
     openServo2();
     openServo4();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Light Can");
-    lcd.setCursor(0, 2);
-    lcd.print("Accepted");
     current_command = -1; 
   }
   
   else if (current_command == 4) { 
     openServo2();
     openServo3();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Heavy Can");
-    lcd.setCursor(0, 2);
-    lcd.print("Rejected");
     current_command = -1; 
   } 
   
@@ -113,13 +80,6 @@ void loop() {
   else if (current_command == 6) { 
     openServo2();
     openServo3();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Unknown Heavy Object");
-    lcd.setCursor(0, 2);
-    lcd.print("Rejected");
     current_command = -1; 
   }
   
@@ -127,25 +87,11 @@ void loop() {
     openServo5();
     delay(1500);
     openServo4();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Plastic-Bottle");
-    lcd.setCursor(0, 2);
-    lcd.print("Accepted");
     current_command = -1; 
   } 
   
   else if (current_command == 8) { 
     openServo3();
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    lcd.setCursor(0, 1);
-    lcd.print("Non-Bottle Object");
-    lcd.setCursor(0, 2);
-    lcd.print("Rejected");
     current_command = -1; 
   }
   

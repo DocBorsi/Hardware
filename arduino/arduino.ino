@@ -13,7 +13,7 @@ HX711 scale;
 const int dataPin = 13;
 const int clockPin = 12;
 float w1, w2, previous = 0;
-const int sensor = 7;
+const int sensor = A0;
 
 int current_command = -1;
 
@@ -135,21 +135,10 @@ void loop() {
     notdispense();
     current_command = -1;
   }
-
   else if (current_command == 16){
-    lcd.clear();
-    lcd.setCursor(3,0);
-    lcd.print("Bin is Full");
-    current_command == -1;
+    insufficient();
+    current_command = -1;
   }
-
-  else if (current_command == 17){
-    lcd.clear();
-    lcd.setCursor(3, 0);  
-    lcd.print("BOTECANnected");
-    current_command == -1;
-  }
-
 
   delay(100); 
 }
@@ -230,6 +219,11 @@ void getWeight(){
 
 void insufficient(){
   int irState = digitalRead(sensor);
-  irState == LOW;
-    
+  if (irState == LOW){
+    Serial.println("Have coins");
+  }
+  else if (irState == HIGH){
+    Serial.println("Insufficient Balance");
+  }
+  
 }

@@ -103,7 +103,7 @@ class Machine:
         '''
         self.send_command(0)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
 
     def open_servo_1(self):
         '''
@@ -111,7 +111,7 @@ class Machine:
         '''
         self.send_command(1)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
         self.lcd.text('Insert Item', 1)
 
     def close_servo1(self):
@@ -120,7 +120,7 @@ class Machine:
         '''
         self.send_command(2)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
         self.lcd.text('Item detected', 1)
 
     def open_servo_2_4(self):
@@ -129,7 +129,7 @@ class Machine:
         '''
         self.send_command(3)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
         self.lcd.text('Light Can', 1)
         self.lcd.text('Accepted', 2)
 
@@ -139,7 +139,7 @@ class Machine:
         '''
         self.send_command(4)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
         self.lcd.text('Heavy Can', 1)
         self.lcd.text('Rejected', 2)
 
@@ -155,7 +155,7 @@ class Machine:
         '''
         self.send_command(6)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
         self.lcd.text('Unknown heavy object', 1)
         self.lcd.text('Rejected', 2)
 
@@ -165,7 +165,7 @@ class Machine:
         '''
         self.send_command(7)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
         self.lcd.text('Plastic-Bottle', 1)
         self.lcd.text('Accepted', 2)
 
@@ -175,7 +175,7 @@ class Machine:
         '''
         self.send_command(8)
         self.lcd.clear()
-        self.lcd.text('BOTECANnected', 3)
+        self.lcd.text('    BOTECANnected', 0)
         self.lcd.text('Non-plastic object', 1)
         self.lcd.text('Rejected', 2)
 
@@ -225,6 +225,16 @@ class Machine:
         for i in range(amount):
             self.send_command(15)
     
+    def bin_full(self):
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Bin is Full', 1)
+
+    def insufficient(self):
+        self.lcd.clear()
+        self.lcd.text('    BOTECANnected', 0)
+        self.lcd.text('Insufficient Coins', 1)
+        self.send_command(16)
     
 
     def get_distance_tube(self):

@@ -83,6 +83,7 @@ servo_opened = False
 items = []  # List to store details of all items inserted
 
 last_debounce = time.time() - 3
+last_sms = time.time()
 machine.close_servo_1()
 time.sleep(3)
 
@@ -90,6 +91,15 @@ while True:
     current = time.time()
 
     if not started:
+        # if no coins, send sms
+        if not machine.detect_coins():
+            if time.time() - last_sms < 3600:
+                print('Last SMS cooldown not passed')
+                continue
+            send_sms('09123456789', 'No coins available')
+            last_sms = time.time()
+            continue
+
         payout = check_for_unredeemed_coins()
         if payout:
             id = payout.get('id')
@@ -106,11 +116,15 @@ while True:
             if can_full_distance < 20:
                 print('Can bin is full')
                 send_sms('09123456789', 'Can bin is full')
+                machine.lcd.clear()
+                machine.lcd.text('Can bin is full', 1)
                 continue
 
             if plastic_full_distance < 20:
                 print('Plastic bin is full')
                 send_sms('09123456789', 'Plastic bin is full')
+                machine.lcd.clear()
+                machine.lcd.text('Plastic bin is full', 1)
                 continue
 
             started = True
